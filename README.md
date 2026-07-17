@@ -2,7 +2,7 @@
 
 Ideal tutorials teach you SOLID. **Bad** code is remembered better.
 
-> Museum stats: **7** exhibits in **5** halls, latest addition - **#0007**.
+> Museum stats: **8** exhibits in **6** halls, latest addition - **#0008**.
 
 ### 🗂 Collections
 
@@ -36,7 +36,13 @@ Ideal tutorials teach you SOLID. **Bad** code is remembered better.
 |--:|---------|-------|----------|
 | 0006 | [A closure capturing the loop variable](src/linq/0006-closure-over-loop-variable/) | 🟢 | five callbacks, one shared `i` - every lambda reads the value after the loop ended |
 
+### 🗄 ORM
+
+| # | Exhibit | Level | The pain |
+|--:|---------|-------|----------|
+| 0008 | [The N+1 query problem](src/orm/0008-n-plus-one/) | 🟡 | loading 20 orders costs 21 SQL queries - one for the list, one more per row |
+
 # To Be Continued
 
-More halls under construction: **ORM**, **datetime**,
+More halls under construction: **datetime**,
 **strings & memory**, **DI lifetimes**, **security**.
