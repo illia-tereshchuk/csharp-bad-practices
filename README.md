@@ -24,13 +24,19 @@ Each exhibit folder has its own README: symptom → mechanics → fix.
 
 ## Exhibits
 
-> Museum stats: **1** exhibit, latest — **#0001**.
+> Museum stats: **2** exhibits in **2** halls, latest addition — **#0002**.
 
 ### 🗂 Collections
 
 | # | Exhibit | Level | The pain |
 |--:|---------|-------|----------|
-| [0001](src/collections/0001-modify-while-enumerating/) | Modifying a collection while iterating | 🟢 junior trap | `foreach` + `Remove` on the same list — partial execution and a crash. |
+| 0001 | [Modifying a collection while iterating](src/collections/0001-modify-while-enumerating/) | 🟢 junior trap | `foreach` + `Remove` on the same list — partial execution and a crash. |
+
+### 🔢 Numbers
+
+| # | Exhibit | Level | The pain |
+|--:|---------|-------|----------|
+| 0002 | [Calculating money with double](src/numbers/0002-doubles-for-money/) | 🟢 junior trap | `0.1 + 0.2 != 0.3` — binary floats can't hold decimal cents, and the audit won't reconcile. |
 
 More halls under construction: **async**, **ORM**, **datetime**,
 **strings & memory**, **exceptions**, **DI lifetimes**, **security**.
