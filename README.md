@@ -2,7 +2,7 @@
 
 Ideal tutorials teach you SOLID. **Bad** code is remembered better.
 
-> Museum stats: **5** exhibits in **4** halls, latest addition — **#0005**.
+> Museum stats: **6** exhibits in **5** halls, latest addition — **#0006**.
 
 ### 🗂 Collections
 
@@ -28,6 +28,12 @@ Ideal tutorials teach you SOLID. **Bad** code is remembered better.
 | # | Exhibit | Level | The pain |
 |--:|---------|-------|----------|
 | 0005 | [Rethrowing with throw ex](src/exceptions/0005-throw-ex-stack-amnesia/) | 🟡 | `throw ex` wipes the stack trace — the investigation starts at the wrong line |
+
+### 🔗 LINQ & Lambdas
+
+| # | Exhibit | Level | The pain |
+|--:|---------|-------|----------|
+| 0006 | [A closure capturing the loop variable](src/linq/0006-closure-over-loop-variable/) | 🟢 | five callbacks, one shared `i` — every lambda reads the value after the loop ended |
 
 # To Be Continued
 

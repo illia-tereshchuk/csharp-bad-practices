@@ -63,7 +63,7 @@ reverse-engineer the process from old commits.
 
 ## Halls (Categories)
 
-`numbers` · `collections` · `async` · `orm` · `datetime` · `strings-memory` ·
-`exceptions` · `di-lifetimes` · `security`
+`numbers` · `collections` · `linq` · `async` · `orm` · `datetime` ·
+`strings-memory` · `exceptions` · `di-lifetimes` · `security`
 
 Opening a new hall: create the folder, add it to this list.
