@@ -1,6 +1,8 @@
-# Contributing to the Museum
+# Curator's Playbook
 
-New exhibits are welcome — especially the ones that cost you a weekend.
+This museum is a personal collection — one curator, one voice. This file is
+the internal checklist for adding an exhibit, so future-me doesn't have to
+reverse-engineer the process from old commits.
 
 ## Add an Exhibit in 10 Minutes
 
@@ -11,7 +13,8 @@ New exhibits are welcome — especially the ones that cost you a weekend.
    ```
 
 2. **Copy the template** into the right hall (category). The slug is
-   kebab-case and names the crime — `0002-async-void`, not `0002-my-bug`:
+   kebab-case and names the crime — `0002-doubles-for-money`, not
+   `0002-my-bug`:
 
    ```bash
    cp -r docs/template src/<category>/<NNNN>-<slug>
@@ -35,10 +38,10 @@ New exhibits are welcome — especially the ones that cost you a weekend.
    dotnet run Good.cs   # works
    ```
 
-7. **Add your row** to the front-page table in the root README
-   *(temporary — a generator will take this over)*.
+7. **Update the front page**: the exhibit row in the right hall's table and
+   the stats line *(temporary — a generator will take this over)*.
 
-8. **Open a PR** titled `Add exhibit #NNNN: <slug>`.
+8. **Commit** as `Add exhibit #NNNN: <slug>`.
 
 ## Museum Rules
 
@@ -49,16 +52,18 @@ New exhibits are welcome — especially the ones that cost you a weekend.
   read over coffee.
 - **Single file, no project.** Exhibits are file-based apps. Need a NuGet
   package? Use a directive at the top of the file: `#:package Dapper@2.*`.
-  A folder with a full `.csproj` needs a justification in the PR.
+  A folder with a full `.csproj` needs a good reason — note it in the
+  commit message.
 - **Believable domain.** An `OrderService` with subscribers beats `Foo`
   with `Bar`. Readers should recognize their own codebase.
 - **English only** — code, comments, docs.
 - **No shaming.** We all wrote this code at some point. Exhibits mock the
   code, never the author.
+- **Jokes live in the README.** Code comments stay plain and boring.
 
 ## Halls (Categories)
 
-`collections` · `async` · `orm` · `datetime` · `strings-memory` ·
+`numbers` · `collections` · `async` · `orm` · `datetime` · `strings-memory` ·
 `exceptions` · `di-lifetimes` · `security`
 
-Want a new hall? Open an issue first so we can argue about the name.
+Opening a new hall: create the folder, add it to this list.

@@ -49,18 +49,6 @@ More halls under construction: **async**, **ORM**, **datetime**,
 | 🟡 mid-level trap | Routinely survives code review |
 | 🔴 senior trap | Interview-grade; people argue about it in the comments |
 
-## Contributing
-
-Got a production scar to share? Exhibit numbers are global — grab the next
-free one with:
-
-```bash
-dotnet run tools/next-id.cs
-```
-
-Then copy [the template](docs/template/) and follow
-[CONTRIBUTING.md](CONTRIBUTING.md).
-
 ## Disclaimer
 
 All bad practices in this museum are performed by trained professionals on
