@@ -4,10 +4,10 @@ title: Name the crime in a few words
 category: collections
 level: 🟢  # or 🟡 / 🔴
 tags: [TypeInvolved, MethodInvolved]
-summary: One line for the front-page table — what breaks and how much it hurts.
+summary: One line for the front-page table - what breaks and how much it hurts.
 ---
 
-# #XXXX — Title of the Exhibit
+# #XXXX - Title of the Exhibit
 
 ## 💥 Symptom
 
@@ -18,14 +18,14 @@ weird logs, wrong totals, a service that dies at 3 AM. Make the reader say
 ## 🔍 The Offending Code
 
 ```csharp
-// The minimal incriminating snippet — a few lines, not the whole file
+// The minimal incriminating snippet - a few lines, not the whole file
 ```
 
 ## 🧠 What's Actually Going On
 
 The mechanics. Why does the runtime / compiler / library behave this way?
 Which wrong assumption does the author of this code hold? This section is
-the educational core — be precise, link to docs if needed.
+the educational core - be precise, link to docs if needed.
 
 ## ✅ The Fix
 
@@ -35,7 +35,7 @@ right call.
 
 ## 😈 The Even Worse Sibling *(optional)*
 
-A related variant that is even nastier — e.g. one that fails silently
+A related variant that is even nastier - e.g. one that fails silently
 instead of crashing.
 
 ## 🎓 Senior Nuance *(optional)*

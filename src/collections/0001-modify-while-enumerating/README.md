@@ -4,17 +4,17 @@ title: Modifying a collection while iterating
 category: collections
 level: 🟢
 tags: [List, foreach, InvalidOperationException]
-summary: foreach + Remove on the same list — partial execution and a crash.
+summary: foreach + Remove on the same list - partial execution and a crash.
 ---
 
-# #0001 — Modifying a Collection While Iterating
+# #0001 - Modifying a Collection While Iterating
 
 ## 💥 Symptom
 
 The inactive-subscriber cleanup ran "halfway" in production: one subscriber
 got removed, the rest survived, and the logs show
 `InvalidOperationException: Collection was modified`. And if someone swallowed
-the exception with a `try/catch` — no logs either, just a half-cleaned database.
+the exception with a `try/catch` - no logs either, just a half-cleaned database.
 
 ## 🔍 The Offending Code
 
@@ -30,10 +30,10 @@ foreach (var subscriber in subscribers)
 
 ## 🧠 What's Actually Going On
 
-`foreach` works through an **enumerator** — a cursor stepping through the list.
+`foreach` works through an **enumerator** - a cursor stepping through the list.
 `List<T>` keeps an internal version counter: every mutation (Add, Remove,
 Clear...) bumps it. The enumerator captures the version when created and
-compares it on every step. After `Remove()` the versions no longer match — and
+compares it on every step. After `Remove()` the versions no longer match - and
 the next loop iteration throws.
 
 This is a **safety net, not sabotage**: after a removal the elements shift, and
@@ -71,7 +71,7 @@ for (int i = 0; i < subscribers.Count; i++)
 ```
 
 After `RemoveAt(i)` everything shifts left and `i++` jumps over the neighbor.
-No exception — just a bug quietly living in production for years. The classic
+No exception - just a bug quietly living in production for years. The classic
 crutch `i--` after removal works, but that's already the second trick in three
 lines of code.
 
@@ -86,11 +86,11 @@ contract.
 
 - Code-review eye: any `Remove` / `Add` / `Clear` inside a `foreach` over the
   same collection.
-- Rider / ReSharper flag this statically — don't ignore the yellow squiggles.
+- Rider / ReSharper flag this statically - don't ignore the yellow squiggles.
 - Suspicious pattern to search for: a loop whose body mentions the same
   variable it iterates over.
 
 ## 📚 Dig Deeper
 
-- [List&lt;T&gt;.RemoveAll — Microsoft Learn](https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.removeall)
+- [List&lt;T&gt;.RemoveAll - Microsoft Learn](https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1.removeall)
 - [IEnumerator&lt;T&gt; and the enumeration contract](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1)

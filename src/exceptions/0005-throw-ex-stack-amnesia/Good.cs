@@ -18,7 +18,7 @@ catch (Exception ex)
             $"The trace lost the crime scene: {nameof(ValidateCard)} is not in it");
     }
 
-    Console.WriteLine($"Trace still points at {nameof(ValidateCard)} — debuggable.");
+    Console.WriteLine($"Trace still points at {nameof(ValidateCard)} - debuggable.");
 }
 
 void ProcessPayment()

@@ -7,7 +7,7 @@ var congratulations = new List<Action>();
 
 for (int i = 0; i < winners.Length; i++)
 {
-    var winner = winners[i]; // fresh variable each iteration — this is what gets captured
+    var winner = winners[i]; // fresh variable each iteration - this is what gets captured
     congratulations.Add(
         () => Console.WriteLine($"Congrats, {winner}! Your prize is on the way."));
 }

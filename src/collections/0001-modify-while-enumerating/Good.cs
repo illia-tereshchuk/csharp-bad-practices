@@ -10,7 +10,7 @@ var subscribers = new List<Subscriber>
 
 Console.WriteLine($"Subscribers before cleanup: {subscribers.Count}");
 
-// The list knows how to remove by condition — no iterating over a live collection
+// The list knows how to remove by condition - no iterating over a live collection
 var removed = subscribers.RemoveAll(s => !s.IsActive);
 
 Console.WriteLine($"Inactive subscribers removed: {removed}");

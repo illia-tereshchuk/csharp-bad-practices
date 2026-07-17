@@ -7,13 +7,13 @@ tags: [async, exceptions, fire-and-forget]
 summary: "an exception in `async void` sails past your try/catch and kills the process"
 ---
 
-# #0007 — `async void` and the Uncatchable Exception
+# #0007 - `async void` and the Uncatchable Exception
 
 ## 💥 Symptom
 
 The service dies at random moments with an unhandled exception from a helper
 that is wrapped in `try/catch` at every call site. The crash dump doesn't
-even mention your calling code — just thread-pool plumbing. In desktop apps
+even mention your calling code - just thread-pool plumbing. In desktop apps
 the window simply vanishes. Restarts happen at night, the bug never
 reproduces in the debugger, and the catch block has perfect test coverage.
 
@@ -22,7 +22,7 @@ reproduces in the debugger, and the catch block has perfect test coverage.
 ```csharp
 try
 {
-    SendWelcomeEmail(address);         // async void — returns instantly
+    SendWelcomeEmail(address);         // async void - returns instantly
     Console.WriteLine("All good.");    // prints. it's lying
 }
 catch (Exception ex)                   // covers nothing that matters
@@ -41,10 +41,10 @@ async void SendWelcomeEmail(string address)
 
 A normal `async Task` method stores its exception **inside the returned
 Task**, where it waits patiently until someone `await`s it. `async void`
-has no Task — the exception has nowhere to live. So the state machine
+has no Task - the exception has nowhere to live. So the state machine
 throws it *raw on the thread pool*, and an unhandled thread-pool exception
 terminates the process. Look at the crash trace in this exhibit: it goes
-through `Task.ThrowAsync` and `ThreadPoolWorkQueue.Dispatch` — your call
+through `Task.ThrowAsync` and `ThreadPoolWorkQueue.Dispatch` - your call
 site isn't even in it.
 
 The `try/catch` only guards the synchronous slice of the call: an async
@@ -67,8 +67,8 @@ Full version in [Good.cs](Good.cs). The toolbox:
 | Option | When it's the right call |
 |---|---|
 | `async Task` + `await` | The default. Everywhere |
-| `async void` | Event handlers only — the platform's contract. Wrap the *entire body* in try/catch |
-| Deliberate fire-and-forget | Store the `Task`, observe it later — or a `SafeFireAndForget` helper that logs faults |
+| `async void` | Event handlers only - the platform's contract. Wrap the *entire body* in try/catch |
+| Deliberate fire-and-forget | Store the `Task`, observe it later - or a `SafeFireAndForget` helper that logs faults |
 
 ## 😈 The Even Worse Sibling
 
@@ -76,7 +76,7 @@ Full version in [Good.cs](Good.cs). The toolbox:
 customers.ForEach(async c => await NotifyAsync(c));
 ```
 
-Nobody typed `async void` here — but `List<T>.ForEach` takes an
+Nobody typed `async void` here - but `List<T>.ForEach` takes an
 `Action<T>`, so the async lambda *compiles into one*. Same trap in a lambda
 costume, and it walks straight through code review. Any API with an
 `Action` parameter does this: `Parallel.For`, timer callbacks, `ForEach`.
@@ -85,21 +85,21 @@ costume, and it walks straight through code review. Any API with an
 
 An async method runs **synchronously until its first await**. Which means:
 if the `throw` happens *before* the first `await`, the caller's catch
-*does* catch it — even from `async void`. This exhibit would behave
+*does* catch it - even from `async void`. This exhibit would behave
 completely differently if two lines swapped places. A bug that appears and
 disappears when someone reorders statements is the most expensive kind to
 hunt.
 
 ## 🔎 How to Find It in Your Codebase
 
-- `grep -rn "async void"` — everything that is not an event handler is a
+- `grep -rn "async void"` - everything that is not an event handler is a
   defect, no exceptions to the rule.
-- Async lambdas passed where an `Action` is expected — `ForEach`,
+- Async lambdas passed where an `Action` is expected - `ForEach`,
   `Parallel.*`, timers, `IObservable.Subscribe`.
 - The `Microsoft.VisualStudio.Threading.Analyzers` package flags this as
-  **VSTHRD100** — worth adding to any async-heavy codebase.
+  **VSTHRD100** - worth adding to any async-heavy codebase.
 
 ## 📚 Dig Deeper
 
-- [Stephen Cleary — Async/Await Best Practices](https://learn.microsoft.com/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming)
-- [David Fowler — Async Guidance](https://github.com/davidfowl/AspNetCoreDiagnosticScenarios/blob/master/AsyncGuidance.md)
+- [Stephen Cleary - Async/Await Best Practices](https://learn.microsoft.com/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming)
+- [David Fowler - Async Guidance](https://github.com/davidfowl/AspNetCoreDiagnosticScenarios/blob/master/AsyncGuidance.md)

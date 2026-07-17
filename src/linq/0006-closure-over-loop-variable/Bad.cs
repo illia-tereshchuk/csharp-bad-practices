@@ -16,5 +16,5 @@ Console.WriteLine("The ceremony begins:");
 
 foreach (var congratulate in congratulations)
 {
-    congratulate(); // 💥 every callback reads i as it is NOW — and now it's 5
+    congratulate(); // 💥 every callback reads i as it is NOW - and now it's 5
 }
