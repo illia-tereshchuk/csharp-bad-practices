@@ -4,7 +4,8 @@ title: Name the crime in a few words
 category: collections
 level: 🟢  # or 🟡 / 🔴
 tags: [TypeInvolved, MethodInvolved]
-summary: One line for the front-page table - what breaks and how much it hurts.
+summary: One line on what breaks and how much it hurts - kept for the future index.
+rule: "Never <the commandment this exhibit teaches> - this goes to the front-page table"
 ---
 
 # #XXXX - Title of the Exhibit

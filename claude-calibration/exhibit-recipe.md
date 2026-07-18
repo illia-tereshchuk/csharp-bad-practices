@@ -33,7 +33,8 @@ title: Enumerating a LINQ query twice
 category: linq             # == hall folder
 level: 🟡                  # bare emoji, no words
 tags: [LINQ, IEnumerable, deferred-execution]
-summary: "one line == the front-page 'pain' cell; keep short (curator edits these)"
+summary: "one line on what breaks - kept for the future index (curator edits these)"
+rule: "Never enumerate a LINQ query twice - materialize it once"  # == the front-page cell
 ---
 ```
 Then sections (😈 and 🎓 optional but strongly preferred - they carry the senior audience):
@@ -49,12 +50,17 @@ Then sections (😈 and 🎓 optional but strongly preferred - they carry the se
 
 ## Front-page row
 
-Add under the right hall's table (create the hall section if new):
+Add under the right hall's table (create the hall section if new). Tables are
+**headerless**: an empty header row + delimiter (GFM can't render a table
+without them), then data rows. The last column is the exhibit's "Never ..."
+commandment, == front-matter `rule`:
 ```
-| 0009 | [Enumerating a LINQ query twice](src/linq/0009-multiple-enumeration/) | 🟡 | <summary text> |
+| | | | |
+|--:|---|---|---|
+| 0009 | [Enumerating a LINQ query twice](src/linq/0009-multiple-enumeration/) | 🟡 | Never enumerate a LINQ query twice - materialize it once |
 ```
 Then bump the stats line: `**N** exhibits in **M** halls, latest addition - **#NNNN**`.
-Link sits on the TITLE, not the number. Pain cell == front-matter summary.
+Link sits on the TITLE, not the number.
 
 Hall emojis in use: 🗂 collections · 🔢 numbers · ⚡ async · 🔗 linq · 💥 exceptions · 🗄 orm.
 

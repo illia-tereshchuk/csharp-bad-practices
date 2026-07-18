@@ -5,6 +5,7 @@ category: collections
 level: 🟢
 tags: [List, foreach, InvalidOperationException]
 summary: foreach + Remove on the same list - partial execution and a crash.
+rule: "Never modify a collection while iterating it"
 ---
 
 # #0001 - Modifying a Collection While Iterating

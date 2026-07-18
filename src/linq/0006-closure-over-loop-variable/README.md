@@ -5,6 +5,7 @@ category: linq
 level: 🟢
 tags: [closures, lambdas, delegates]
 summary: "five callbacks, one shared `i` - every lambda reads the value after the loop ended"
+rule: "Never close over a loop variable - capture a copy"
 ---
 
 # #0006 - A Closure Capturing the Loop Variable

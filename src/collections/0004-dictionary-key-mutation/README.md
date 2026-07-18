@@ -5,6 +5,7 @@ category: collections
 level: 🟡
 tags: [Dictionary, GetHashCode, records]
 summary: "change a field on the key - `foreach` still shows the entry, lookups can't find it"
+rule: "Never mutate an object that serves as a dictionary key"
 ---
 
 # #0004 - Mutating an Object That Lives as a Dictionary Key

@@ -5,6 +5,7 @@ category: value-types
 level: 🔴
 tags: [structs, readonly, defensive-copy]
 summary: "every method call on the readonly field runs on a hidden copy - points added, balance forever 0"
+rule: "Never write a mutable struct"
 ---
 
 # #0011 - A Mutable Struct Behind a Readonly Field

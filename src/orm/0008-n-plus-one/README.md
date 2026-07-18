@@ -5,6 +5,7 @@ category: orm
 level: 🟡
 tags: [EFCore, SQL, performance]
 summary: "loading 20 orders costs 21 SQL queries - one for the list, one more per row"
+rule: "Never query the database inside a loop"
 ---
 
 # #0008 - The N+1 Query Problem

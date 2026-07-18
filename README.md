@@ -6,54 +6,54 @@ Ideal tutorials teach you SOLID. **Bad** code is remembered better.
 
 ### 🗂 Collections
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0001 | [Modifying a collection while iterating](src/collections/0001-modify-while-enumerating/) | 🟢 | `foreach` + `Remove` on the same list - partial execution and a crash |
-| 0004 | [Mutating a dictionary key](src/collections/0004-dictionary-key-mutation/) | 🟡 | change a field on the key - `foreach` still shows the entry, lookups can't find it |
+| | | | |
+|--:|---|---|---|
+| 0001 | [Modifying a collection while iterating](src/collections/0001-modify-while-enumerating/) | 🟢 | Never modify a collection while iterating it |
+| 0004 | [Mutating a dictionary key](src/collections/0004-dictionary-key-mutation/) | 🟡 | Never mutate an object that serves as a dictionary key |
 
 ### 🔢 Numbers
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0002 | [Calculating money with double](src/numbers/0002-doubles-for-money/) | 🟢 | `0.1 + 0.2 != 0.3` - binary floats can't hold decimal cents |
+| | | | |
+|--:|---|---|---|
+| 0002 | [Calculating money with double](src/numbers/0002-doubles-for-money/) | 🟢 | Never use `double` for money |
 
 ### ⚡ Async & Threading
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0003 | [Incrementing a shared counter from parallel threads](src/async/0003-race-on-shared-counter/) | 🟢 | `counter++` from two threads - thousands of increments quietly vanish. |
-| 0007 | [async void and the uncatchable exception](src/async/0007-async-void/) | 🟡 | an exception in `async void` sails past your try/catch and kills the process |
+| | | | |
+|--:|---|---|---|
+| 0003 | [Incrementing a shared counter from parallel threads](src/async/0003-race-on-shared-counter/) | 🟢 | Never mutate shared state without synchronization |
+| 0007 | [async void and the uncatchable exception](src/async/0007-async-void/) | 🟡 | Never write `async void` outside event handlers |
 
 ### 💥 Exceptions
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0005 | [Rethrowing with throw ex](src/exceptions/0005-throw-ex-stack-amnesia/) | 🟡 | `throw ex` wipes the stack trace - the investigation starts at the wrong line |
+| | | | |
+|--:|---|---|---|
+| 0005 | [Rethrowing with throw ex](src/exceptions/0005-throw-ex-stack-amnesia/) | 🟡 | Never rethrow with `throw ex` - use bare `throw` |
 
 ### 🔗 LINQ & Lambdas
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0006 | [A closure capturing the loop variable](src/linq/0006-closure-over-loop-variable/) | 🟢 | five callbacks, one shared `i` - every lambda reads the value after the loop ended |
-| 0009 | [Enumerating a LINQ query twice](src/linq/0009-multiple-enumeration/) | 🟡 | the header counted 3 rows, the body printed 2 - each enumeration reruns the query |
+| | | | |
+|--:|---|---|---|
+| 0006 | [A closure capturing the loop variable](src/linq/0006-closure-over-loop-variable/) | 🟢 | Never close over a loop variable - capture a copy |
+| 0009 | [Enumerating a LINQ query twice](src/linq/0009-multiple-enumeration/) | 🟡 | Never enumerate a LINQ query twice - materialize it once |
 
 ### 🗄 ORM
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0008 | [The N+1 query problem](src/orm/0008-n-plus-one/) | 🟡 | loading 20 orders costs 21 SQL queries - one for the list, one more per row |
+| | | | |
+|--:|---|---|---|
+| 0008 | [The N+1 query problem](src/orm/0008-n-plus-one/) | 🟡 | Never query the database inside a loop |
 
 ### 🔔 Events
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0010 | [A static event that never lets go](src/events/0010-immortal-subscriber/) | 🔴 | a closed widget keeps reacting to events - the static event pins it in memory forever |
+| | | | |
+|--:|---|---|---|
+| 0010 | [A static event that never lets go](src/events/0010-immortal-subscriber/) | 🔴 | Never subscribe to a long-lived event without unsubscribing |
 
 ### 📦 Value Types
 
-| # | Exhibit | Level | The pain |
-|--:|---------|-------|----------|
-| 0011 | [A mutable struct behind a readonly field](src/value-types/0011-defensive-copy-ambush/) | 🔴 | every method call on the readonly field runs on a hidden copy - points added, balance forever 0 |
+| | | | |
+|--:|---|---|---|
+| 0011 | [A mutable struct behind a readonly field](src/value-types/0011-defensive-copy-ambush/) | 🔴 | Never write a mutable struct |
 
 # To Be Continued
 

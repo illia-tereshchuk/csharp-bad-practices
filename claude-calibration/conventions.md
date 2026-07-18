@@ -16,6 +16,7 @@ in-repo for fast reload.
 - **Front page is deliberately minimal:** one-line manifesto, stats line, hall tables, big `# To Be Continued` H1 (intentional second H1). No "How to Run", no "Contributing", no disclaimer.
 - **Punchlines are saved for LinkedIn**, not the repo. Repo tone = "lab / museum," a touch more restrained than my instinct.
 - **Front-matter summaries trend short** ("TikTok generation" - his words). He edits wording himself; don't over-write.
+- **Front-page tables are headerless** (empty header row `| | | | |` + delimiter - GFM needs them to render) and the last column is a "Never ..." commandment, sourced from front-matter `rule:`. Established 2026-07-18.
 
 ## Code comments
 

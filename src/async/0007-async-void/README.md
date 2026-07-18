@@ -5,6 +5,7 @@ category: async
 level: 🟡
 tags: [async, exceptions, fire-and-forget]
 summary: "an exception in `async void` sails past your try/catch and kills the process"
+rule: "Never write `async void` outside event handlers"
 ---
 
 # #0007 - `async void` and the Uncatchable Exception

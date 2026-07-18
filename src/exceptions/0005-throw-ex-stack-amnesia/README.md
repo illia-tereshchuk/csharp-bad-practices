@@ -5,6 +5,7 @@ category: exceptions
 level: 🟡
 tags: [exceptions, stack-trace, CA2200]
 summary: "`throw ex` wipes the stack trace - the investigation starts at the wrong line"
+rule: "Never rethrow with `throw ex` - use bare `throw`"
 ---
 
 # #0005 - Rethrowing with `throw ex`

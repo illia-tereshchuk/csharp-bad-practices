@@ -5,6 +5,7 @@ category: async
 level: 🟢
 tags: [threading, race-condition, Interlocked]
 summary: "`counter++` from two threads - thousands of increments quietly vanish."
+rule: "Never mutate shared state without synchronization"
 ---
 
 # #0003 - Incrementing a Shared Counter from Parallel Threads
