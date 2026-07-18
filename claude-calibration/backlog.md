@@ -21,7 +21,6 @@ Order chosen to: open 4 new halls, spread archetypes, introduce 🔴.
 | slug | lvl | A | the twist (mechanic, not just name) |
 |------|:--:|:--:|-------------------------------------|
 | whenall-hides-exceptions | 🔴 | 5 | WhenAll surfaces ONE of N faults; the rest hide in `.Exception`. |
-| token-tourism | 🟡 | 5 | token passed through 5 sigs, never *checked*; Cancel does nothing. |
 | the-collected-timer | 🔴 | 6 | Timer with no stored ref gets GC'd; force GC.Collect, ticks stop. |
 | the-forgotten-task | 🟡 | 1,5 | unstored un-awaited Task; exception buried, "save" never happened. |
 | lock-on-a-string | 🔴 | 2 | `lock("cache")` in 2 classes = same interned object. Prove via ReferenceEquals. |

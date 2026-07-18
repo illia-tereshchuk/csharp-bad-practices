@@ -1,6 +1,6 @@
 # C# Bad Practices
 
-> Museum stats: **15** exhibits in **10** halls, latest addition - **#0015**.
+> Museum stats: **16** exhibits in **10** halls, latest addition - **#0016**.
 
 ### 🗂 Collections
 
@@ -21,6 +21,7 @@
 |--:|---|---|---|
 | 0003 | [Incrementing a shared counter from parallel threads](src/async/0003-race-on-shared-counter/) | 🟢 | never mutate shared state without synchronization |
 | 0007 | [async void and the uncatchable exception](src/async/0007-async-void/) | 🟡 | never write `async void` outside event handlers |
+| 0016 | [A cancellation token nobody reads](src/async/0016-token-tourism/) | 🟡 | never accept a token you don't pass down or check |
 
 ### 💥 Exceptions
 

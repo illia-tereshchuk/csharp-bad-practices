@@ -31,6 +31,7 @@ in-repo for fast reload.
 ## Curation bar (from the backlog discussion)
 
 - **Reject predictable finales.** If the reader can guess the outcome from the title, it's a "top-10 mistakes" listicle item, not an exhibit. An exhibit needs a mechanic twist - a "wait, WHAT?" even for someone who knows the bug. (This killed turkish-i and int-overflow.)
+- **Prefer accessible + axiomatic.** Curator's explicit praise for #0016 (token-tourism): everyday contract everyone touches, rule that reads like an axiom ("never accept a token you don't pass down or check"). When generating future batches, lean toward these over exotic corner cases.
 - Prefer silent-wrongness and money/audit stakes; they screenshot well and land emotionally.
 
 ## Commit style (when I commit)
