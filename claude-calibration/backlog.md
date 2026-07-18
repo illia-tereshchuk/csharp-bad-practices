@@ -76,6 +76,6 @@ Order chosen to: open 4 new halls, spread archetypes, introduce 🔴.
 | _seeds:_ DateTime Kind lost in JSON roundtrip · polymorphic `$type` handling · reference loops | | | brainstorm before proposing |
 
 ### collections / linq (misc pool)
-| slug | lvl | A | twist |
-|------|:--:|:--:|-------|
-| distinct-that-didnt | 🟡 | 2 | Distinct on class w/o Equals override = reference equality, dupes survive. |
+_Empty - distinct-that-didnt shipped as #0013. Seeds for restocking:
+GroupBy on reference-equality keys · Contains vs Any confusion ·
+OrderBy with a non-deterministic key._

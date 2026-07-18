@@ -1,8 +1,6 @@
 # C# Bad Practices
 
-Ideal tutorials teach you SOLID. **Bad** code is remembered better.
-
-> Museum stats: **12** exhibits in **9** halls, latest addition - **#0012**.
+> Museum stats: **13** exhibits in **9** halls, latest addition - **#0013**.
 
 ### 🗂 Collections
 
@@ -36,6 +34,7 @@ Ideal tutorials teach you SOLID. **Bad** code is remembered better.
 |--:|---|---|---|
 | 0006 | [A closure capturing the loop variable](src/linq/0006-closure-over-loop-variable/) | 🟢 | never close over a loop variable - capture a copy |
 | 0009 | [Enumerating a LINQ query twice](src/linq/0009-multiple-enumeration/) | 🟡 | never enumerate a LINQ query twice - materialize it once |
+| 0013 | [Distinct on a class without value equality](src/linq/0013-distinct-that-didnt/) | 🟡 | never dedupe objects that don't define equality |
 
 ### 🗄 ORM
 
