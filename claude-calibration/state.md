@@ -2,8 +2,8 @@
 
 _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 
-- Exhibits: **22** | Halls: **11** | Next free id: **0023**
-- Last updated after: #0022 (2026-07-19)
+- Exhibits: **23** | Halls: **11** | Next free id: **0024**
+- Last updated after: #0023 (2026-07-19)
 
 ## Exhibits shipped
 
@@ -31,6 +31,7 @@ _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 | 0020 | datetime | shrinking-billing-day | 🟡 | 5 |
 | 0021 | async | whenall-hides-exceptions | 🔴 | 5 |
 | 0022 | di-lifetimes | the-captive-scoped | 🔴 | 6 |
+| 0023 | events | unremovable-lambda | 🟡 | 2 |
 
 ## Halls
 
@@ -39,7 +40,8 @@ _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 
 ## Level mix
 
-- 🟢 4 | 🟡 12 | 🔴 6  ->  async hall is at 7 exhibits (biggest); favor other halls next.
+- 🟢 4 | 🟡 13 | 🔴 6  ->  async hall is at 7 exhibits (biggest); favor other halls next.
+- Only strings-memory remains unopened (length-lies-about-emoji / mojibake-factory).
 
 ## Infra status
 

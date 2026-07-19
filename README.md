@@ -1,6 +1,6 @@
 # C# Mistakes Explained
 
-> Museum stats: **22** exhibits in **11** halls, latest addition - **#0022**.
+> Museum stats: **23** exhibits in **11** halls, latest addition - **#0023**.
 
 ### 🗂 Collections
 
@@ -53,6 +53,7 @@
 | | | | |
 |--:|---|---|---|
 | 0010 | [A static event that never lets go](src/events/0010-immortal-subscriber/) | 🔴 | never subscribe to a long-lived event without unsubscribing |
+| 0023 | [Unsubscribing from an event with a lambda](src/events/0023-unremovable-lambda/) | 🟡 | never unsubscribe with a lambda - name the handler |
 
 ### 📦 Value Types
 

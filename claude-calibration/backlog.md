@@ -58,9 +58,9 @@ myths · rethrow across await boundaries._
 | the-vanishing-mutation | 🔴 | 3 | mutate struct from a collection -> mutates a copy; array works, List doesn't. Sibling of #0011. |
 
 ### events (hall opened by #0010)
-| slug | lvl | A | twist |
-|------|:--:|:--:|-------|
-| the-unremovable-lambda | 🟡 | 1 | `Click -= (s,e)=>...` never unsubscribes; different delegate instance. Teased in #0010's 😈 section. |
+_Empty - unremovable-lambda shipped as #0023. Seeds: event handler that
+throws takes down the rest of the invocation list · `?.Invoke` race between
+null-check and call._
 
 ### serialization (hall opened by #0012; pool needs restocking)
 | slug | lvl | A | twist |
