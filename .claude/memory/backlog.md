@@ -21,7 +21,6 @@ timing, not dependent on an unpinned machine environment.
 ### numbers
 | slug | A | the twist |
 |------|:--:|---|
-| nan-poisons-comparison | 4 | One NaN and Max, sorting and `>=` filters all disagree, because NaN is not equal to itself. |
 
 ### async
 | slug | A | the twist |

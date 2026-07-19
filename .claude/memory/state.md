@@ -2,8 +2,8 @@
 
 _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 
-- Exhibits: **28** | Halls: **14** | Next free id: **0029**
-- Last updated after: #0028 (2026-07-19)
+- Exhibits: **29** | Halls: **14** | Next free id: **0030**
+- Last updated after: #0029 (2026-07-19)
 
 ## Exhibits shipped
 
@@ -37,6 +37,7 @@ _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 | 0026 | disposal | dispose-what-you-dont-own | 5 |
 | 0027 | equality | null-comparisons-are-always-false | 4,5 |
 | 0028 | records | with-copies-the-reference | 3 |
+| 0029 | numbers | nan-poisons-comparison | 4 |
 
 ## Halls
 
