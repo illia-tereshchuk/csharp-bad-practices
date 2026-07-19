@@ -78,7 +78,7 @@ Full version in [Good.cs](Good.cs). The toolbox:
 ## 😈 The Even Worse Sibling
 
 Nobody awaits it at all - `_ = Task.WhenAll(...)` or a forgotten task
-(exhibit #0019). Now *all* the faults vanish, not just the extras, and the
+(exhibit [0019-forgotten-task](../../async/0019-forgotten-task/)). Now *all* the faults vanish, not just the extras, and the
 `AggregateException` becomes an unobserved-task exception that at best
 surfaces at some later GC. From "saw one of three" down to "saw none of
 three" - the same API, one missing `await` worse.
@@ -88,7 +88,7 @@ three" - the same API, one missing `await` worse.
 `Task.WhenAll` also flattens **cancellations** into the mix: if some tasks
 are canceled and others faulted, the single rethrown exception might be an
 `OperationCanceledException` while real errors hide behind it - the
-misdiagnosis of exhibit #0015, now nondeterministic about which one you
+misdiagnosis of exhibit [0015-cancellation-eaten-by-catch](../../exceptions/0015-cancellation-eaten-by-catch/), now nondeterministic about which one you
 see. And `WhenAll<TResult>` has a quiet twist: on failure its result array
 is unavailable, but tasks that *did* succeed still ran their side effects -
 a partial completion wearing the mask of total failure.

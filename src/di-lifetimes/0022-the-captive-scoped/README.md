@@ -96,16 +96,16 @@ Now `ValidateOnBuild` sees a clean constructor and passes - the graph
 *looks* correct. But the service locator resolves `CurrentUser` from the
 root scope, so every request still shares one instance. Same leak, now
 invisible to the one tool that would have caught it. (Its cousin haunts
-exhibit #0014.)
+exhibit [0014-container-hoarder](../../di-lifetimes/0014-container-hoarder/).)
 
 ## 🎓 Senior Nuance
 
 Two escalations a review should weigh. First, **concurrency**: a singleton
 is touched by many requests at once, so a captured scoped service isn't
 just stale - it's mutated from multiple threads with no synchronization,
-which is exhibit #0003 hiding inside a lifetimes bug. Second, **disposal**:
+which is exhibit [0003-race-on-shared-counter](../../async/0003-race-on-shared-counter/) hiding inside a lifetimes bug. Second, **disposal**:
 if the captured scoped service is `IDisposable`, it now lives and dies with
-the singleton instead of the request - the leak from exhibit #0014, arrived
+the singleton instead of the request - the leak from exhibit [0014-container-hoarder](../../di-lifetimes/0014-container-hoarder/), arrived
 by a different road. And the subtle truth beneath the demo: the captured
 instance is the *root* scope's `CurrentUser`, an instance that belongs to
 no request at all - the singleton didn't capture Olena's user, it captured

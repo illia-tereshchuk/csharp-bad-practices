@@ -61,13 +61,13 @@ await Task.Delay(25, token);   // the leaf is now cancellable
 ```
 
 ...and translate the resulting `OperationCanceledException` at the
-boundary (exhibit #0015 covers that half). The toolbox:
+boundary (exhibit [0015-cancellation-eaten-by-catch](../../exceptions/0015-cancellation-eaten-by-catch/) covers that half). The toolbox:
 
 | Option | When it's the right call |
 |---|---|
 | Forward the token to every cancellable API | The default: `Task.Delay`, `HttpClient`, EF, streams all take one |
 | `token.ThrowIfCancellationRequested()` in the loop | CPU-bound work with no awaits to carry the token |
-| Catch OCE at the boundary, report "cancelled" | Pairs with #0015: let it flow, then translate |
+| Catch OCE at the boundary, report "cancelled" | Pairs with [0015-cancellation-eaten-by-catch](../../exceptions/0015-cancellation-eaten-by-catch/): let it flow, then translate |
 
 ## 😈 The Even Worse Sibling
 

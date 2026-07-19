@@ -17,7 +17,7 @@ helper. The team fixes the NRE, closes the ticket, everyone moves on. A
 week later the *same* incident happens again - because the NRE was never
 the disease, only the bandage tearing. The actual error (a misconfigured
 gateway key) existed for exactly one stack frame and was thrown away
-before any logger saw it. Sibling of exhibit #0005: there the trace lied
+before any logger saw it. Sibling of exhibit [0005-throw-ex-stack-amnesia](../../exceptions/0005-throw-ex-stack-amnesia/): there the trace lied
 about the *where*; here the exception lies about the *what*.
 
 ## 🔍 The Offending Code

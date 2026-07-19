@@ -39,7 +39,7 @@ the caller's lifetime - the process can exit mid-write (this exhibit
 grants a 300 ms grace period precisely to prove the silence is not about
 timing).
 
-Compare the family: `async void` (exhibit #0007) has no task at all, so
+Compare the family: `async void` (exhibit [0007-async-void](../../async/0007-async-void/)) has no task at all, so
 its exception detonates on the thread pool and *kills the process* -
 loud. The forgotten task is the same negligence one rung further down
 the fear ladder: same lost work, and even the crash is gone. The
@@ -62,13 +62,13 @@ A visible failure is a fixable failure. The toolbox:
 | Option | When it's the right call |
 |---|---|
 | `await` it | The default. Audit that must happen is part of the request |
-| Store the tasks, `await Task.WhenAll` later | Fan-out batches - see exhibit #0018 |
+| Store the tasks, `await Task.WhenAll` later | Fan-out batches - see exhibit [0018-tasks-are-not-results](../../async/0018-tasks-are-not-results/) |
 | A `SafeFireAndForget` helper that catches and logs | True fire-and-forget: someone must still observe the faults |
 
 ## 😈 The Even Worse Sibling
 
 Fire-and-forget on a web request path. The request ends, the DI scope is
-disposed (exhibit #0014's territory), and the forgotten task wakes up to
+disposed (exhibit [0014-container-hoarder](../../di-lifetimes/0014-container-hoarder/)'s territory), and the forgotten task wakes up to
 find its `DbContext` dead - it now fails with `ObjectDisposedException`
 *instead of* doing the work, still silently, and only under load, when
 the task loses the race against request teardown. A bug that exists only

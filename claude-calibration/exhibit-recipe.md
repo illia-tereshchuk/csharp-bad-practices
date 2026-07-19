@@ -47,6 +47,13 @@ Then sections (😈 and 🎓 optional but strongly preferred - they carry the se
 7. `## 🎓 Senior Nuance` - the twist that surprises experts (version history, edge case, myth-bust).
 8. `## 🔎 How to Find It in Your Codebase` - grep patterns, analyzer IDs (CA2200, VSTHRD100), IDE inspections, .editorconfig recipes. This is the LAST section - no link sections after it (Dig Deeper was removed by curator's call 2026-07-18: "nobody opens them").
 
+**Cross-references must be clickable links, never bare `#NNNN`** (curator's
+call 2026-07-19: hunting numbers by hand is unusable). Write them as
+`[NNNN-slug](../../<hall>/<NNNN-slug>/)` - the `../../` form works from any
+exhibit README, same hall or not. The exhibit's own H1 keeps the bare
+`# #NNNN - Title` form. Non-exhibit numbers in prose (order #1002, prices)
+stay bare.
+
 ## Front-page row
 
 Add under the right hall's table (create the hall section if new). Tables are

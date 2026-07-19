@@ -18,6 +18,7 @@ in-repo for fast reload.
 - **Front-matter summaries trend short** ("TikTok generation" - his words). He edits wording himself; don't over-write.
 - **Front-page tables are headerless** (empty header row `| | | | |` + delimiter - GFM needs them to render) and the last column is a "never ..." commandment, sourced from front-matter `rule:`. Lowercase "never" - curator's call. Established 2026-07-18.
 - **No "Dig Deeper" / link sections** in exhibit READMEs - "nobody opens them". READMEs end at "How to Find It in Your Codebase". Established 2026-07-18.
+- **Cross-references are clickable links**, written as `[NNNN-slug](../../<hall>/<NNNN-slug>/)`, never bare `#NNNN` - the number alone is unsearchable by hand. Own H1 and non-exhibit numbers stay bare. Established 2026-07-19.
 
 ## Code comments
 

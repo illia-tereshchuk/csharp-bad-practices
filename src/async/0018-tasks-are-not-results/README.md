@@ -38,7 +38,7 @@ An async lambda returns a `Task<T>` - so this `Select` produces
 **the tasks themselves**. Two awaits at two different altitudes, and the
 outer one is missing.
 
-Then deferred execution stacks on top (exhibit #0009's cousin): the tasks
+Then deferred execution stacks on top (exhibit [0009-multiple-enumeration](../../linq/0009-multiple-enumeration/)'s cousin): the tasks
 don't even exist until something enumerates the query. `Count()` is that
 something - it *starts* five sends as a side effect and instantly reports
 "5", which is true of tasks and says nothing about deliveries. The program
@@ -66,7 +66,7 @@ Full version in [Good.cs](Good.cs). The toolbox:
 
 Enumerate that query **twice** - `Count()` for the report header, `foreach`
 for the body - and deferred execution re-runs the async lambda per
-enumeration: every customer gets the invoice *twice*. Exhibit #0009's
+enumeration: every customer gets the invoice *twice*. Exhibit [0009-multiple-enumeration](../../linq/0009-multiple-enumeration/)'s
 multiple enumeration, upgraded from "wrong count" to "double charge". A
 lazy query with side effects is a button that fires every time anyone
 looks at it.
@@ -78,7 +78,7 @@ unbounded concurrency - you just DoS'd your own SMTP server; that's what
 `Parallel.ForEachAsync` with `MaxDegreeOfParallelism` is for. Second, the
 family tree: `Select(async ...)` at least *hands you the tasks* - the
 negligence is recoverable, one `WhenAll` away. Its cousin
-`List.ForEach(async ...)` (exhibit #0007) compiles the lambda to
+`List.ForEach(async ...)` (exhibit [0007-async-void](../../async/0007-async-void/)) compiles the lambda to
 `async void` and throws the tasks away entirely - nothing to await even
 if you remember. Recoverable versus unrecoverable, one method name apart.
 

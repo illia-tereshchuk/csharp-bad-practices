@@ -70,7 +70,7 @@ instances. A snapshot of values needs a projection:
 
 Point the same habit at a database and every enumeration is a full SQL
 query: `Any()` + `Count()` + `foreach` over one `IQueryable` is three
-round-trips (exhibit #0008's cousin). Deadlier still across method
+round-trips (exhibit [0008-n-plus-one](../../orm/0008-n-plus-one/)'s cousin). Deadlier still across method
 boundaries: you pass an `IEnumerable<T>` into a method that enumerates it,
 having already enumerated it yourself - the double execution is now
 invisible in any single screen of code.
