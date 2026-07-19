@@ -2,8 +2,8 @@
 
 _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 
-- Exhibits: **23** | Halls: **11** | Next free id: **0024**
-- Last updated after: #0023 (2026-07-19)
+- Exhibits: **24** | Halls: **11** | Next free id: **0025**
+- Last updated after: #0024 (2026-07-19)
 
 ## Exhibits shipped
 
@@ -32,6 +32,7 @@ _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 | 0021 | async | whenall-hides-exceptions | 5 |
 | 0022 | di-lifetimes | the-captive-scoped | 6 |
 | 0023 | events | unremovable-lambda | 2 |
+| 0024 | serialization | polymorphic-loses-derived | 4,5 |
 
 ## Halls
 
