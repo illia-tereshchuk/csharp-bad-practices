@@ -3,7 +3,6 @@ id: "0006"
 title: A closure capturing the loop variable
 category: linq
 tags: [closures, lambdas, delegates]
-summary: "five callbacks, one shared `i` - every lambda reads the value after the loop ended"
 rule: "never close over a loop variable - capture a copy"
 ---
 
@@ -79,7 +78,7 @@ get processed twice, some never, and it only misbehaves under load. The
 sequential crash in this exhibit is the *lucky* version - this one passes
 every test you'll ever write for it.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `foreach` had exactly this bug until C# 5: one shared iteration variable
 per loop. In 2012 the language team made a rare **breaking change** - the

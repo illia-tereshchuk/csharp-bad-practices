@@ -3,7 +3,6 @@ id: "0010"
 title: A static event that never lets go
 category: events
 tags: [events, memory-leak, GC, WeakReference]
-summary: "a closed widget keeps reacting to events - the static event pins it in memory forever"
 rule: "never subscribe to a long-lived event without unsubscribing"
 ---
 
@@ -77,7 +76,7 @@ to `-=`. Writing the "same" lambda again produces a different delegate, so
 the unsubscribe silently removes nothing. Immortal and unremovable, one
 line of code.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 The exhibit demonstrates leak-test hygiene it had to learn the hard way:
 the widget is created and dropped inside a separate

@@ -3,7 +3,6 @@ id: "0013"
 title: Distinct on a class without value equality
 category: linq
 tags: [LINQ, Distinct, equality]
-summary: "`Distinct()` on a plain class compares references - the duplicates survive the dedupe"
 rule: "never dedupe objects that don't define equality"
 ---
 
@@ -70,7 +69,7 @@ is **never even called** - the duplicates survive anyway, and now the code
 looks fixed. The compiler hints at this with warning CS0659; treat it as
 an error.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Anonymous types have value equality built in - which is why the quick
 prototype `select new { o.Email }` deduped perfectly, and the bug appeared

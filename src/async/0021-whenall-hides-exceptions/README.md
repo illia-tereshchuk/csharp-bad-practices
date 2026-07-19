@@ -3,7 +3,6 @@ id: "0021"
 title: await Task.WhenAll shows only the first fault
 category: async
 tags: [async, Task.WhenAll, AggregateException]
-summary: "three tasks fail, await surfaces one - the other two hide in the task's AggregateException"
 rule: "never trust await Task.WhenAll to report more than one failure"
 ---
 
@@ -82,7 +81,7 @@ Nobody awaits it at all - `_ = Task.WhenAll(...)` or a forgotten task
 surfaces at some later GC. From "saw one of three" down to "saw none of
 three" - the same API, one missing `await` worse.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `Task.WhenAll` also flattens **cancellations** into the mix: if some tasks
 are canceled and others faulted, the single rethrown exception might be an

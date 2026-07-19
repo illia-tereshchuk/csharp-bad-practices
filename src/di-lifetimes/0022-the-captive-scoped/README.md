@@ -3,7 +3,6 @@ id: "0022"
 title: A singleton that captured a scoped dependency
 category: di-lifetimes
 tags: [dependency-injection, lifetimes, captive-dependency, thread-safety]
-summary: "a singleton holds one CurrentUser forever - so Ivan's session shows Olena's cart"
 rule: "never inject a scoped service into a singleton"
 ---
 
@@ -97,7 +96,7 @@ root scope, so every request still shares one instance. Same leak, now
 invisible to the one tool that would have caught it. (Its cousin haunts
 exhibit [0014-container-hoarder](../../di-lifetimes/0014-container-hoarder/).)
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Two escalations a review should weigh. First, **concurrency**: a singleton
 is touched by many requests at once, so a captured scoped service isn't

@@ -3,7 +3,6 @@ id: "0012"
 title: A JSON payload that maps to nothing
 category: serialization
 tags: [System.Text.Json, deserialization, case-sensitivity]
-summary: "camelCase JSON meets PascalCase C# - every property lands on its default, nobody throws"
 rule: "never deserialize without pinning the naming contract"
 ---
 
@@ -83,7 +82,7 @@ and STJ deserializes its own PascalCase output flawlessly. Only real
 camelCase payloads from the outside world turn into zeroes. A test suite
 that serializes its own fixtures cannot see this bug *by construction*.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `required` (C# 11) is enforced by the serializer: a missing required member
 fails with a `JsonException` that lists the absent properties - the crash

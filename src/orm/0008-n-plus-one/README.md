@@ -3,7 +3,6 @@ id: "0008"
 title: The N+1 query problem
 category: orm
 tags: [EFCore, SQL, performance]
-summary: "loading 20 orders costs 21 SQL queries - one for the list, one more per row"
 rule: "never query the database inside a loop"
 ---
 
@@ -71,7 +70,7 @@ innocent property access: `order.Customer.Name` silently fires a query
 mid-loop. Nobody wrote a query at all - the ORM did, on every iteration.
 That is exactly why lazy loading is off by default in EF Core.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 The opposite extreme fails too: chain enough `Include(...).ThenInclude(...)`
 and the single JOIN multiplies rows into a cartesian explosion - one query

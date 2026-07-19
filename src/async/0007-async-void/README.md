@@ -3,7 +3,6 @@ id: "0007"
 title: async void and the uncatchable exception
 category: async
 tags: [async, exceptions, fire-and-forget]
-summary: "an exception in `async void` sails past your try/catch and kills the process"
 rule: "never write `async void` outside event handlers"
 ---
 
@@ -81,7 +80,7 @@ Nobody typed `async void` here - but `List<T>.ForEach` takes an
 costume, and it walks straight through code review. Any API with an
 `Action` parameter does this: `Parallel.For`, timer callbacks, `ForEach`.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 An async method runs **synchronously until its first await**. Which means:
 if the `throw` happens *before* the first `await`, the caller's catch

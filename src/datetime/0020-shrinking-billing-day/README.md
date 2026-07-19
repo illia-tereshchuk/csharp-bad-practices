@@ -3,7 +3,6 @@ id: "0020"
 title: A billing day that shrinks
 category: datetime
 tags: [DateTime, AddMonths, recurrence]
-summary: "Jan 31 + a month = Feb 28, and every later date inherits the 28th - the anniversary never comes back"
 rule: "never compute the next date from the previous one - keep the anchor"
 ---
 
@@ -73,7 +72,7 @@ migration that has to guess what each customer's original day was. The
 in-memory version of this bug loses information for a request; the
 persisted version loses it for good.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `AddMonths` is not invertible: `Jan 31 -> AddMonths(1) -> AddMonths(-1)`
 lands on January **28**. Any round-trip logic ("shift the period forward,

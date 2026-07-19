@@ -3,7 +3,6 @@ id: "0001"
 title: Modifying a collection while iterating
 category: collections
 tags: [List, foreach, InvalidOperationException]
-summary: foreach + Remove on the same list - partial execution and a crash.
 rule: "never modify a collection while iterating it"
 ---
 
@@ -75,7 +74,7 @@ No exception - just a bug quietly living in production for years. The classic
 crutch `i--` after removal works, but that's already the second trick in three
 lines of code.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Starting with .NET Core 3.0, `Dictionary<TKey, TValue>` **allows** `Remove()`
 during enumeration (but not `Add()`). So "any collection mutation inside

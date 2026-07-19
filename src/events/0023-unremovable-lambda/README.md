@@ -3,7 +3,6 @@ id: "0023"
 title: Unsubscribing from an event with a lambda
 category: events
 tags: [events, delegates, lambdas, unsubscribe]
-summary: "the -= gets an identical-looking lambda, removes nothing, and the cancelled alert keeps firing"
 rule: "never unsubscribe with a lambda - name the handler"
 ---
 
@@ -72,7 +71,7 @@ publisher pins it) **and** unremovable (there is no delegate to pass to
 `-=`). Nothing short of destroying the publisher can release it - the
 leak has no fix at the call site, only a rewrite.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 A named method **does** work, and for a reason worth knowing: a method
 group conversion creates a new delegate object each time, but with the

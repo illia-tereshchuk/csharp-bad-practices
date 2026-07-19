@@ -3,7 +3,6 @@ id: "0004"
 title: Mutating an object that lives as a dictionary key
 category: collections
 tags: [Dictionary, GetHashCode, records]
-summary: "change a field on the key - `foreach` still shows the entry, lookups can't find it"
 rule: "never mutate an object that serves as a dictionary key"
 ---
 
@@ -77,7 +76,7 @@ as equal. Every future operation picks one of them semi-randomly, exports
 show duplicates, and no single line of code will ever look wrong again.
 The crash in this exhibit is the *lucky* outcome.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Records made this trap *more* ergonomic, not less: a pre-records class
 without overrides used reference equality, so mutating its fields was

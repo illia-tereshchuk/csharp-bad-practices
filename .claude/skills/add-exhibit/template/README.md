@@ -3,7 +3,6 @@ id: "XXXX"
 title: Name the crime in a few words
 category: collections
 tags: [TypeInvolved, MethodInvolved]
-summary: One line on what breaks and how much it hurts - kept for the future index.
 rule: "never <the commandment this exhibit teaches> - this goes to the front-page table"
 ---
 
@@ -38,7 +37,7 @@ right call.
 A related variant that is even nastier - e.g. one that fails silently
 instead of crashing.
 
-## 🎓 Senior Nuance *(optional)*
+## 🎓 Advanced Nuance *(optional)*
 
 The detail that surprises even experienced folks: version-specific behavior,
 a counterintuitive edge case, a myth to bust.

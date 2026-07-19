@@ -14,14 +14,12 @@ id: "0009"                 # quoted string, keeps leading zeros
 title: Enumerating a LINQ query twice
 category: linq             # == the hall folder name
 tags: [LINQ, IEnumerable, deferred-execution]
-summary: "one line on what breaks - kept for the future index"
 rule: "never enumerate a LINQ query twice - materialize it once"
 ---
 ```
 
 - `rule` is the exhibit's commandment - lowercase `never ...`. It is copied
-  verbatim into the front-page table cell.
-- `summary` trends short (curator edits these himself - don't over-write).
+  verbatim into the front-page list cell.
 
 ## Section order (fixed)
 
@@ -36,9 +34,11 @@ rule: "never enumerate a LINQ query twice - materialize it once"
 6. `## 😈 The Even Worse Sibling` *(optional, strongly preferred)* - the
    silent/nastier variant. Recurring punchline: "the crash in this exhibit is
    the *lucky* outcome."
-7. `## 🎓 Senior Nuance` *(optional, strongly preferred)* - the twist that
-   surprises experts: version history, an edge case, a myth to bust. These two
-   optional sections carry the senior audience - include them when you can.
+7. `## 🎓 Advanced Nuance` *(optional, strongly preferred)* - the twist that
+   surprises even people who know the bug: version history, an edge case, a myth
+   to bust. These two optional sections add depth for the reader who wants to go
+   deeper - include them when you can. ("Advanced" describes the material, not a
+   caste of person - there are no "seniors" here.)
 8. `## 🔎 How to Find It in Your Codebase` - grep patterns, analyzer IDs
    (CA2200, VSTHRD100), IDE inspections, `.editorconfig` recipes.
 

@@ -3,7 +3,6 @@ id: "0014"
 title: Transient disposables resolved from the root container
 category: di-lifetimes
 tags: [dependency-injection, IDisposable, lifetimes, memory-leak]
-summary: "the root container tracks every disposable it creates - 100 requests, 100 buffers pinned till shutdown"
 rule: "never resolve transient disposables from the root container"
 ---
 
@@ -73,7 +72,7 @@ layers deep. The container the singleton captured is the root one - every
 disposable it hands out is pinned forever, and no registration audit will
 ever show it.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Two twists worth knowing. First: `BuildServiceProvider(validateScopes: true)`
 catches scoped-from-root - but **not** this. Transients from the root are

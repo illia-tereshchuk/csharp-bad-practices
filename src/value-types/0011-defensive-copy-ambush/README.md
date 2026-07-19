@@ -3,7 +3,6 @@ id: "0011"
 title: A mutable struct behind a readonly field
 category: value-types
 tags: [structs, readonly, defensive-copy]
-summary: "every method call on the readonly field runs on a hidden copy - points added, balance forever 0"
 rule: "never write a mutable struct"
 ---
 
@@ -92,7 +91,7 @@ The cruel part: the compiler catches the assignment form -
 `card.Balance.Value = 5` is error CS1612 - but lets the method call sail
 through. Same bug, and this one doesn't even need `readonly` to bite.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Defensive copies are also a silent performance tax: they happen for
 `in` parameters and `ref readonly` locals too, and a fat struct copied on

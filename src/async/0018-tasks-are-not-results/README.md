@@ -3,7 +3,6 @@ id: "0018"
 title: Tasks mistaken for results
 category: async
 tags: [async, LINQ, Task, deferred-execution]
-summary: "`Select(async ...)` yields tasks, not results - the report says 5 sent, the counter says 0"
 rule: "never mistake a collection of tasks for a collection of results"
 ---
 
@@ -70,7 +69,7 @@ multiple enumeration, upgraded from "wrong count" to "double charge". A
 lazy query with side effects is a button that fires every time anyone
 looks at it.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Two altitude markers. First: `Task.WhenAll` on ten thousand items is
 unbounded concurrency - you just DoS'd your own SMTP server; that's what

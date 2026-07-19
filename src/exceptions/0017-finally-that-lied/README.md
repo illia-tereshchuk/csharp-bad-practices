@@ -3,7 +3,6 @@ id: "0017"
 title: A finally block that throws
 category: exceptions
 tags: [exceptions, finally, cleanup]
-summary: "a throw inside finally replaces the in-flight exception - the real cause never reaches the logs"
 rule: "never let a finally block throw"
 ---
 
@@ -88,7 +87,7 @@ later the pool is exhausted and nobody knows since when. A throwing
 `finally` lies about the past; a silent one lies about the future. Catch -
 and **log**.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `using` is a `finally` in disguise - so a throwing `Dispose` replaces the
 in-flight exception in exactly the same way, and the pretty syntax exempts

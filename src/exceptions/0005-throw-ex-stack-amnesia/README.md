@@ -3,7 +3,6 @@ id: "0005"
 title: Rethrowing with throw ex
 category: exceptions
 tags: [exceptions, stack-trace, CA2200]
-summary: "`throw ex` wipes the stack trace - the investigation starts at the wrong line"
 rule: "never rethrow with `throw ex` - use bare `throw`"
 ---
 
@@ -89,7 +88,7 @@ This one destroys everything at once: the exception type (goodbye
 `catch (SqlException)` upstream), the trace, *and* the inner exception.
 All that survives is a string. `throw ex` at least leaves the type alive.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Even the virtuous `throw;` rewrites one thing: the line number of the frame
 that contains the catch block - it will show the rethrow line, not the

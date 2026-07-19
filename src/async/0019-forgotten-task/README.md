@@ -3,7 +3,6 @@ id: "0019"
 title: The fire-and-forgotten task
 category: async
 tags: [async, fire-and-forget, CS4014]
-summary: "an unawaited Task buries its exception - the save never happened and the logs are clean"
 rule: "never drop a Task - await it or hand it to someone who will"
 ---
 
@@ -73,7 +72,7 @@ find its `DbContext` dead - it now fails with `ObjectDisposedException`
 the task loses the race against request teardown. A bug that exists only
 in production traffic patterns.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 The compiler warns - CS4014 fired while building this exhibit - but only
 inside `async` methods: route the same call through a synchronous caller

@@ -3,7 +3,6 @@ id: "0002"
 title: Calculating money with double
 category: numbers
 tags: [double, decimal, floating-point]
-summary: "`0.1 + 0.2 != 0.3` - binary floats can't hold decimal cents, and the audit won't reconcile."
 rule: "never use `double` for money"
 ---
 
@@ -74,7 +73,7 @@ transaction drifts by a quadrillionth, thousands of transactions drift by
 real cents, and the error surfaces months later in an annual report. The
 crash in this exhibit is the *lucky* outcome.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `decimal` is not "infinite precision" - it's a 128-bit base-10 float with
 28-29 significant digits. `1m / 3m * 3m` yields `0.9999999999999999999999999999`,

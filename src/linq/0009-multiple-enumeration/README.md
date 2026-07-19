@@ -3,7 +3,6 @@ id: "0009"
 title: Enumerating a LINQ query twice
 category: linq
 tags: [LINQ, IEnumerable, deferred-execution]
-summary: "the header counted 3 rows, the body printed 2 - each enumeration reruns the query"
 rule: "never enumerate a LINQ query twice - materialize it once"
 ---
 
@@ -74,7 +73,7 @@ boundaries: you pass an `IEnumerable<T>` into a method that enumerates it,
 having already enumerated it yourself - the double execution is now
 invisible in any single screen of code.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 `Count()` has a fast path: for an `ICollection` it just reads the stored
 size. So `list.Count()` is free, while `query.Count()` is a full

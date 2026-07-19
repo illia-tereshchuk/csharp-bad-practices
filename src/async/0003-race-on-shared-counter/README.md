@@ -3,7 +3,6 @@ id: "0003"
 title: Incrementing a shared counter from parallel threads
 category: async
 tags: [threading, race-condition, Interlocked]
-summary: "`counter++` from two threads - thousands of increments quietly vanish."
 rule: "never mutate shared state without synchronization"
 ---
 
@@ -69,7 +68,7 @@ guarantees *visibility* (no stale reads from caches), but not *atomicity*:
 read-add-write is still three steps, and threads still interleave between
 them. A `volatile` counter with `++` is the same bug wearing a safety vest.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Individual reads and writes of an `int` **are** atomic in .NET - you will
 never see a half-written value. That's precisely what makes `++` feel safe:

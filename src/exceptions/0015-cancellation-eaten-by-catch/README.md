@@ -3,7 +3,6 @@ id: "0015"
 title: A catch-all that swallows cancellation
 category: exceptions
 tags: [cancellation, exceptions, retry]
-summary: "`catch (Exception)` treats a cancel as a failure - the retry loop hammers a cancelled job"
 rule: "never let a catch-all eat OperationCanceledException"
 ---
 
@@ -84,7 +83,7 @@ export is marked **delivered**. The failure mode upgrades from "noisy
 false alarm" to "silent partial success" - a cancelled invoice run that
 posts half the invoices and reports green.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Not every `OperationCanceledException` is a cancellation you asked for:
 `HttpClient` reports a **timeout** as `TaskCanceledException` too. A catch

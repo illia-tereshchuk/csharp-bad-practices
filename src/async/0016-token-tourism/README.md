@@ -3,7 +3,6 @@ id: "0016"
 title: A cancellation token nobody reads
 category: async
 tags: [cancellation, CancellationToken, async]
-summary: "the token travels through every signature and is read by none - Cancel does nothing"
 rule: "never accept a token you don't pass down or check"
 ---
 
@@ -80,7 +79,7 @@ looks cancellable, and the whole call graph actually runs on
 `CancellationToken.None`. The tourist at least travelled; this token never
 left home.
 
-## 🎓 Senior Nuance
+## 🎓 Advanced Nuance
 
 Even with perfect token plumbing, cancellation stays a race by design: the
 cancel can arrive after the last page rendered, and "completed" is then an
