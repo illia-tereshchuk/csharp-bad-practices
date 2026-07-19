@@ -27,6 +27,7 @@ per hall. New halls: add a row here first.
 | datetime | 📅 | Datetime |
 | disposal | 🗑️ | Disposal |
 | equality | ⚖️ | Equality |
+| records | 📇 | Records |
 
 ## Planned - language mechanics
 
@@ -37,7 +38,6 @@ per hall. New halls: add a row here first.
 | enums | 🏷️ | Enums |
 | inheritance | 🪆 | Inheritance |
 | pattern-matching | 🧩 | Pattern Matching |
-| records | 📇 | Records |
 
 ## Planned - runtime & resources
 
