@@ -32,6 +32,8 @@ does the same job right, and a `README.md` that explains the mechanic.
 - **Prefer accessible + axiomatic:** everyday contracts everyone touches, with a
   rule that reads like an axiom (`never write async void outside event
   handlers`). Favor these over exotic API footguns.
+- **Prefer silent-wrongness and money/audit stakes** - they screenshot well and
+  land emotionally.
 
 ## Tools (run from repo root)
 
