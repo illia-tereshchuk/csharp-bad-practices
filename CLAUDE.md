@@ -18,8 +18,10 @@ does the same job right, and a `README.md` that explains the mechanic.
   Ukrainian stays in chat.
 - **Hyphens only** - never em/en dashes, anywhere.
 - **Curated by one person, open to contributors.** Outside developers add
-  exhibits through the `contribute` skill and a pull request; the curator
-  reviews every one personally and hands out exhibit numbers himself. The
+  exhibits through the `contribute` skill and a pull request, on a branch in
+  this repo (they are added as collaborators - no forks). Numbers come from
+  `next-id`; the curator verifies them at review and reviews every exhibit
+  personally. The
   curation memory (`rejected.md` and the taste it encodes) is his editorial
   record - use it to filter what you propose, never present or explain it to a
   contributor.

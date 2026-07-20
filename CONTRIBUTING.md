@@ -8,28 +8,29 @@ end up with your username on the front page next to the rule you added.
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [Claude Code](https://claude.com/claude-code)
-- A GitHub account
+- Push access to this repo - ask the maintainer, it takes him one click
 
 ## How it goes
 
-1. Fork the repo and clone your fork.
-2. Run `claude` inside the folder.
-3. Tell it: **"I want to add an exhibit."**
+1. Clone the repo and run `claude` inside the folder.
+2. Tell it: **"I want to add an exhibit."**
 
-From there Claude does the guiding. It shows you a menu of C# mistakes that are
-waiting to be built, helps you write the code and the explanation, runs
-everything to prove the bug is real, and walks you to the pull request.
+That is the whole setup. From there Claude checks your tooling, shows you a menu
+of C# mistakes waiting to be built, drafts the first version with you, runs
+everything to prove the bug is real, and walks you to the pull request - command
+by command if it is your first.
 
 **Pick the one you like most and feel most sure about.** You will be explaining
-it to other developers, so choose a mistake you actually understand or genuinely
-want to understand - that comes through in the writing.
+it to other developers, so choose a mistake you understand or genuinely want to
+understand. That comes through in the writing.
 
 ## Two things to know
 
-- **Ask for your exhibit number.** Numbers are handed out by the maintainer -
-  open an issue or just ask in your PR, and use the number you're given.
 - **Your bug must actually run.** Every exhibit is a program that fails when you
-  run it, next to a fixed version that doesn't. Claude will check this with you
-  before you open the PR.
+  run it, next to a fixed version that does not. Claude checks this with you
+  before the PR.
+- **Every exhibit is reviewed personally.** The maintainer may ask for changes or
+  decline an idea. That is normal for a curated collection and says nothing
+  about your code.
 
-That's it. Questions go in the issue tracker.
+Questions go in the issue tracker.
