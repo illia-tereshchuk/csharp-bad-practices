@@ -15,7 +15,6 @@ timing, not dependent on an unpinned machine environment.
 | slug | A | the twist |
 |------|:--:|---|
 | sort-is-unstable | 4 | List.Sort silently reorders equal elements, so a "sort by date, then by name" two-pass gives an order neither pass asked for; OrderBy is stable, Sort is not. |
-| array-covariance-betrayal | 4 | `object[] a = new string[3]; a[0] = 42;` compiles and throws at runtime - a type-safety hole left open on purpose. |
 | dictionary-order-illusion | 6 | Enumeration order looks like insertion order until one Remove; the next Add reuses the freed slot and the sequence rearranges. |
 
 ### numbers
