@@ -59,3 +59,23 @@ Not yet a full candidate - brainstorm before proposing.
 - **exceptions:** a throw inside `finally` *replaces* the in-flight
   exception - the original error vanishes entirely. Real and deterministic;
   MUST check overlap with #0017 (finally-that-lied) before promoting.
+
+- **poisoned-static-constructor** (A5,6) - a static constructor that throws
+  once poisons the type for the life of the process: every later access
+  throws TypeInitializationException wrapping the original, long after the
+  transient cause is gone.
+
+- **aggregateexception-hides-the-type** (A5) - blocking on a task with
+  `.Result`/`.Wait()` wraps the real failure in AggregateException, so
+  `catch (TimeoutException)` never fires - the exception you handle is not
+  the one that was thrown.
+
+- **exception-filter-runs-anyway** (A5) - a `catch (...) when (Audit(e))`
+  filter runs *before* the stack unwinds and runs even when it returns false -
+  side effects in the guard fire for exceptions you never handled. Adjacent
+  to the-swallowed-filter (same feature, different lie) - keep them distinct
+  or fold as its 😈.
+
+- **exceptions:** rethrow across an await boundary (the stack is already
+  rebuilt) · `using` swallowing the body's exception when Dispose also
+  throws.

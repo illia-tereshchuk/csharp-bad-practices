@@ -175,3 +175,11 @@
   minimal code.
 - **Verified:** PRNG determinism by definition; the honesty note about
   modern seeding recorded so the README doesn't overclaim. Verify at build.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **unsalted-hash-reveals-duplicates** (A5) - bare SHA-256 with no salt makes
+  identical passwords produce identical hashes: the leaked table shows which
+  accounts share a password - the hash hid the value but not the collisions.

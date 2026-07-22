@@ -177,3 +177,11 @@ Not yet a full candidate - brainstorm before proposing.
   false. Roslyn's decision DAG shares one read of the same property path
   across arms: a counting getter was called exactly once across three
   property-pattern arms. Only explicit `when` guards re-read.
+
+- **earlier-pattern-shadows-later** (A5) - a broad `when` guard or base-type
+  case placed first swallows everything, leaving the specific arm below it
+  unreachable - no error, the specialized branch just never runs.
+
+- **type-pattern-skips-null** (A5) - `case string s:` does not match null
+  (null is not an instance of anything), so a null slips past the branch
+  that "handles strings" into the default arm meant for other types.

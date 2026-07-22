@@ -51,3 +51,16 @@
   is baked into the archive.
 - **Verified:** ran on .NET 10 (2026-07-22): V1.Cancelled round-tripped into
   V2.Shipped.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **json-cycle-throws** (A5) - a parent referencing children that reference
+  the parent serializes fine right up until JsonException at runtime: the
+  default serializer has no cycle handling.
+
+- **json-case-sensitive-by-default** (A4,5) - System.Text.Json matches
+  property names case-sensitively (Newtonsoft did not); one `"userId"` vs
+  `"UserId"` and the field stays default with nothing logged - a migration
+  that "changed only the library" drops data.

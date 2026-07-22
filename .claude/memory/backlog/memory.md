@@ -177,3 +177,11 @@ Not yet a full candidate - brainstorm before proposing.
   is still running (GC.KeepAlive exists for exactly this) - a genuine
   "wait, WHAT?", but it reproduces only under Release codegen; find a
   pinned-configuration technique for file-based dotnet run first.
+
+- **finalizer-delays-gc** (A6) - an object with a finalizer survives the
+  collection that should have freed it (finalization queue, needs a second
+  GC), provable with a WeakReference. The two-collect dance already appears
+  inside disposal's the-cleanup-that-never-came repro - coordinate.
+
+- **memory:** a WeakReference checked and then used after a collection -
+  race-shaped; promote only with a hard deterministic assertion.

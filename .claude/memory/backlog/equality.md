@@ -37,3 +37,12 @@ Not yet a full candidate - brainstorm before proposing.
   when the struct has no reference fields - so +0.0 vs -0.0 and NaN behave
   opposite to `==` on the same values. Deep-weeds; needs a floor-clearing
   frame and a premise run before proposing.
+
+- **equals-without-gethashcode** (A2) - override Equals but not GetHashCode
+  and the object works in `List.Contains` yet goes missing in a HashSet or
+  dictionary: two "equal" instances land in different buckets.
+
+- **nan-equals-disagrees-with-operator** (A4,2) - `NaN == NaN` is false but
+  `NaN.Equals(NaN)` is true, so `List.Contains(NaN)` finds it while
+  `Any(x => x == NaN)` never will. Check overlap with shipped #0029
+  (nan-poisons-comparison) before promoting.

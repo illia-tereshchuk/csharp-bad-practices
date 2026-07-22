@@ -159,3 +159,11 @@
   no config tooling can even represent.
 - **Verified:** ran on .NET 10 (2026-07-22): after Reload -
   IConfiguration 99, IOptions 30, IOptionsMonitor 99, IOptionsSnapshot 99.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **config-array-gap-truncates** (A5) - bind a config array whose indices
+  skip a number (0, 1, 3) and the binder reportedly stops at the gap: index
+  3 silently dropped. Premise NOT yet run - verify before promoting.

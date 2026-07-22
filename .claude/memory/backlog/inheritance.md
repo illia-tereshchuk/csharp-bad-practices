@@ -26,3 +26,15 @@
   object is subtly misconfigured for its whole lifetime.
 - **Verified:** language-specified construction order; verify at build,
   including the initializer-vs-body distinction.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **new-hides-does-not-override** (A4) - a method marked `new` hides rather
+  than overrides, so the *same object* runs the base method through a base
+  reference and the derived method through a derived reference.
+
+- **default-arg-from-static-type** (A4) - default parameter values are baked
+  in by the compiler from the *declared* type, so calling an override through
+  a base reference uses the base's default against the derived body.

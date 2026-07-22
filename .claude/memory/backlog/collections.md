@@ -49,3 +49,15 @@
   into `the-cached-failure` (async hall). The two exhibits cross-link.
 - **Verified:** ran on .NET 10 (2026-07-22): barrier repro, factory ran 2x,
   one value stored.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **removeat-in-forward-loop** (A5) - RemoveAt inside a forward `for` shifts
+  every later index down one, so the loop skips the element that slid into
+  the freed slot - and unlike foreach it never throws.
+
+- **getvalueordefault-hides-missing** (A4,5) - `dict.GetValueOrDefault(sku)`
+  returns `default(decimal)` for an absent key - a real 0.00 and "not
+  priced" are the same value, so the order ships free with nothing thrown.

@@ -26,3 +26,19 @@
   Equal-when-they-shouldn't-be and unequal-when-they-should-be, from the
   same design gap.
 - **Verified:** ran on .NET 10 (2026-07-22): records unequal, hashes differ.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **record-struct-is-mutable** (A3,4) - `record struct Point(int X, int Y)`
+  has settable properties by default - the immutability people assume from
+  "record" applies to record *classes* only.
+
+- **with-skips-validation** (A5) - validation in a record's constructor body
+  does not run on `with`: the copy uses the compiler's copy constructor, so
+  an "impossible" invalid state is one `with { ... }` away.
+
+- **record-tostring-leaks-fields** (A5) - a record's generated ToString
+  prints every property, so the moment a Password or Token member joins the
+  record it shows up verbatim in every log line that interpolates the object.

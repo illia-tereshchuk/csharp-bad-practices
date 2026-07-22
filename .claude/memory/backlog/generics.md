@@ -18,3 +18,12 @@
 - **Damage:** connection limits that don't limit, singletons that aren't
   single, caches that miss because the entry went into a sibling.
 - **Verified:** CLR-specified behavior; verify at build.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **generics:** a static constructor in `Registry<T>` "runs once" but
+  actually runs once *per closed type* - same broken model as
+  static-field-per-closed-type; fold in as that exhibit's 😈 rather than a
+  second exhibit.

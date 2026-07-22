@@ -392,3 +392,6 @@ Not yet a full candidate - brainstorm before proposing.
 - **async:** Task.Delay(0) completes synchronously and never yields, while
   Task.Yield always does - "give others a turn" written with Delay(0) does
   nothing. Probably a 😈 section inside another exhibit, not a standalone.
+
+- **async:** Task.WhenAny leaves the losing tasks' exceptions unobserved -
+  real, but needs a deterministic observation technique before promoting.

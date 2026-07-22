@@ -52,3 +52,11 @@
   still exists today: insert `.AsEnumerable()` before the Where and the
   "fix" quietly downloads the entire table to filter it in memory.
 - **Verified:** documented EF Core 3+ behavior; verify at build.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **savechanges-without-transaction** (A5) - two `SaveChanges` calls in one
+  method are not one unit of work: the first commits, the second throws, and
+  the database is left in the half-written state the code assumed impossible.

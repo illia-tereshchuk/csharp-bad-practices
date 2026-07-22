@@ -47,3 +47,13 @@
   in question really is instantiated "once"... per interface.
 - **Verified:** ran on .NET 10 (2026-07-22): two registrations produced two
   instances (ReferenceEquals false).
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **scoped-from-root-lives-forever** (A6,5) - resolving a scoped service
+  straight from the root IServiceProvider gives it singleton lifetime by
+  accident: never disposed, per-request state leaking across requests.
+  Mirror image of shipped #0022 (the-captive-scoped) - check its README/😈
+  overlap before promoting.

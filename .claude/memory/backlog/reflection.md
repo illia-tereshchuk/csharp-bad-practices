@@ -23,3 +23,21 @@
   which makes the pattern look haunted.
 - **Verified:** ran on .NET 10 (2026-07-22): SetValue on the boxed copy,
   variable unchanged.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **gettype-is-exact-not-assignable** (A4,5) -
+  `obj.GetType() == typeof(Base)` is false for a derived instance, so a
+  type-keyed handler dictionary misses every subclass and falls through to
+  the default.
+
+- **getproperty-misses-nonpublic** (A5) - `Type.GetProperty("x")` returns
+  null for non-public or static members because the default binding flags
+  exclude them - the reflective mapper skips fields it was written to copy.
+
+- **activator-needs-parameterless-ctor** (A5) -
+  `Activator.CreateInstance<T>()` compiles for any T but throws
+  MissingMethodException the moment T lacks a public parameterless
+  constructor.

@@ -50,3 +50,24 @@
   hall, but cross-link and keep the mechanics distinct; if only one is
   wanted, the curator picks.
 - **Verified:** encoding math; verify at build.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **trim-is-a-charset-not-a-prefix** (A4,5) -
+  `url.TrimStart("https://".ToCharArray())` strips any leading character in
+  that *set*, not the prefix - a URL starting with 's', 't', 'p' or '/'
+  gets eaten letter by letter.
+
+- **unnormalized-strings-not-equal** (A2,4) - "é" as one code point and as
+  "e" plus combining accent print identically but ordinal `==` says they
+  differ - a uniqueness check waves through a duplicate it cannot see.
+
+- **split-keeps-empty-entries** (A5) - `"a,,b".Split(',')` returns three
+  items, not two: the empty middle field is kept by default, so a positional
+  parser reads every later column shifted by one.
+
+- **interpolation-is-culture-sensitive** (A4) - `$"{amount}"` formats with
+  the current culture, so the same code builds "1,50" or "1.50" per machine -
+  pin two cultures explicitly to stay CI-honest.

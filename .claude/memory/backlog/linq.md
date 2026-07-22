@@ -56,3 +56,15 @@ Not yet a full candidate - brainstorm before proposing.
 - **linq / collections:** GroupBy on reference-equality keys (every item its
   own group) - real, but the damage is loud, not silent; needs a framing
   where it stays wrong quietly before it clears the bar.
+
+- **zip-drops-the-tail** (A5) - Zip stops at the shorter sequence: pair 100
+  ids with 99 names and you silently get 99 rows, no error, the last record
+  simply gone.
+
+- **distinctby-keeps-the-wrong-one** (A5) - `DistinctBy(x => x.Id)` keeps the
+  *first* row per key; feed it events oldest-first and every duplicate
+  resolves to the stale version.
+
+- **linq:** OrderBy with a non-deterministic key, and Single vs First
+  surprising on duplicate data - both need a deterministic silent-damage
+  framing before promoting.

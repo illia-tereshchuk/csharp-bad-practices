@@ -30,3 +30,11 @@
   trigger.
 - **Verified:** ran on .NET 10 (2026-07-22): -7%3 == -1, -12345%10 == -5,
   Abs(int.MinValue) threw OverflowException.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **double-to-decimal-carries-error** (A4) - reading a price as `double` and
+  then casting to `decimal` freezes the binary rounding error into the money
+  type - the `decimal` is exact about a number that was already wrong.

@@ -24,3 +24,15 @@
   into the investigation.
 - **Verified:** ran on .NET 10 (2026-07-22): (Read|Write).HasFlag(Delete)
   == true.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **hasflag-zero-always-true** (A5) - `permissions.HasFlag(Permission.None)`
+  is always true because every set contains the zero flag, so the guard
+  meant to detect "no permissions" passes for everyone.
+
+- **enum-default-is-zero** (A5) - `default(Status)` is 0 whatever you named
+  it; if `Active` is the first member, every uninitialized DTO and struct
+  field arrives already "Active" without anyone setting it.

@@ -52,3 +52,11 @@
   duplicating.
 - **Verified:** timezone math documented; verify at build with pinned zone,
   after the #0020 overlap check.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **ambiguous-date-parse** (A4) - the exact string "02/03/2026" parses to two
+  different real dates under two explicitly-set cultures (US vs UK) with no
+  error either way; pin both cultures in code to stay CI-honest.

@@ -21,3 +21,19 @@
   prefixes, trailing newlines corrupting line-based formats downstream) -
   the check exists, reviewed, and passes garbage.
 - **Verified:** ran on .NET 10 (2026-07-22): `^\d+$` accepted "123\n".
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **dot-misses-newline** (A5) - `.` does not match `\n` by default, so a
+  clean-looking validator passes an input whose second line is the payload -
+  the check only ever saw the first line.
+
+- **unescaped-regex-input** (A4,5) - building a pattern from user text
+  without Regex.Escape turns their `.` into "any char" and their `(` into a
+  runtime ArgumentException.
+
+- **slash-d-matches-unicode-digits** (A5) - `\d` matches every Unicode
+  decimal digit, so a "digits only" check accepts Arabic-Indic or fullwidth
+  numerals that blow up int.Parse two layers downstream.

@@ -27,3 +27,19 @@
   point of a test suite, inverted.
 - **Verified:** async-void semantics verified in batch 1 (parallel-foreach);
   the runner framing to verify at build.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **static-state-leaks-between-tests** (A6,5) - a static field mutated by one
+  test is still there for the next: green in one run order, red in another,
+  and no test declared it owned the state.
+
+- **assert-equal-floats-no-tolerance** (A4) - `Assert.Equal(0.3, 0.1 + 0.2)`
+  fails: the two-argument overload compares doubles exactly; a correct
+  calculation reports as a failing test.
+
+- **collection-assert-is-ordered** (A4) - `Assert.Equal` on two collections
+  is order-sensitive; same members, different order, failing test over
+  correct code.

@@ -64,3 +64,11 @@ Not yet a full candidate - brainstorm before proposing.
 
 - **disposal:** Environment.Exit skips finally blocks and using disposal -
   pairs naturally with the-unflushed-tail as cause of the same symptom.
+
+- **using-var-disposes-late** (A6,1) - `using var conn = Open();` does not
+  dispose at the next blank line - it disposes at the end of the whole
+  method, so the connection you "closed" stays open across everything below.
+
+- **double-dispose-crashes** (A5) - a `using` block plus one explicit
+  `Dispose()` calls Dispose twice; a non-idempotent implementation throws
+  ObjectDisposedException, turning tidy cleanup into a crash.

@@ -21,3 +21,11 @@
 - **Damage:** the annotation system reports the codebase clean while the
   NREs it exists to prevent ship anyway - false confidence at project scale.
 - **Verified:** language-level erasure; verify at build.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **default-of-t-is-null** (A5,6) - a generic `T Get<T>()` returning
+  `default` hands back null for every reference T despite the non-nullable
+  annotation: the "never null" contract is a compile-time fiction.

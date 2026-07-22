@@ -31,3 +31,18 @@ Not yet a full candidate - brainstorm before proposing.
 - **http:** most HttpClient lore (socket exhaustion, stale DNS) fails the
   single-file determinism bar; wait for a pure in-process angle before
   proposing anything here beyond baseaddress-eats-your-path.
+
+- **leading-slash-ignores-baseaddress** (A4) - a request path starting with
+  "/" throws away the BaseAddress path entirely: with base `.../v1`,
+  `GetAsync("/users")` goes to `/users`. Pure Uri math - likely the second
+  act or 😈 of baseaddress-eats-your-path rather than its own exhibit.
+
+- **no-ensuresuccess-reads-error-body** (A5) - `GetAsync` does not throw on
+  404/500; without EnsureSuccessStatusCode the code deserializes the error
+  page as if it were the payload. In-process repro via a fake
+  HttpMessageHandler.
+
+- **timeout-looks-like-cancellation** (A4,5) - HttpClient's own timeout
+  surfaces as TaskCanceledException, the same type a user cancel throws, so
+  the catch treats a server timeout as "user changed their mind" and skips
+  the retry.
