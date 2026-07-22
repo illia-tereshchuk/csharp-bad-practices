@@ -1,0 +1,394 @@
+# ⚡ async
+
+> Status: **opened**. Canonical hall registry (emoji, display name, opened/planned) is `.claude/memory/halls.md`.
+> Entry format and maintenance rules are in `.claude/memory/backlog/README.md`.
+
+### the-collected-timer (A6)
+
+- **Twist:** A Timer with no stored reference gets collected mid-run; the
+  "every minute" job stops with no error, no exception, no log line.
+- **Mechanic:** `System.Threading.Timer` does not root itself. If the only
+  reference is a local in the method that created it, the timer is garbage as
+  soon as that reference dies, and its callbacks simply stop after the GC
+  runs. Nothing observable fails at the moment it happens.
+- **Who hits it:** "schedule a heartbeat/cleanup in Main or a constructor and
+  ignore the return value". Survives all day on a dev machine (little GC
+  pressure), dies quietly in production.
+- **Repro:** create the timer inside a `[MethodImpl(MethodImplOptions.NoInlining)]`
+  helper and do not store the returned reference (this matters: file-based
+  `dotnet run` builds Debug, where locals stay alive to end of method - the
+  helper method's return is what frees the timer). Then `GC.Collect()` +
+  `GC.WaitForPendingFinalizers()`, wait two ticks' worth via a
+  CountdownEvent on a *stored* control timer, and show the abandoned timer's
+  counter stopped while the stored one kept counting. Forced GC keeps it
+  deterministic. No packages.
+- **Damage:** the recurring job - billing sweep, queue pump, heartbeat -
+  silently stops. Discovered days later by absence, the hardest kind of
+  evidence.
+- **Verified:** documented GC-root behavior; the forced-GC repro is standard.
+  Verify at build.
+
+### semaphore-never-released (A5)
+
+- **Twist:** An exception between Wait and Release leaks a permit forever; the
+  next caller waits on a semaphore nobody will ever free.
+- **Mechanic:** `SemaphoreSlim` has no ownership: nothing ties a permit to the
+  code that acquired it, and nothing returns it automatically. If the guarded
+  code throws and `Release()` is not in a `finally` (or the `try` starts too
+  late), the count is down by one forever. After maxCount such failures every
+  `WaitAsync` blocks indefinitely.
+- **Who hits it:** throttling - `SemaphoreSlim(4)` around "at most 4
+  concurrent calls to the payment API", with Release on the happy path only.
+- **Repro:** `SemaphoreSlim(1)`; the guarded operation throws; catch and
+  continue; the next `WaitAsync(TimeSpan.FromMilliseconds(200))` returns
+  false - the permit is provably gone. No real waiting, no packages,
+  deterministic.
+- **Damage:** capacity shrinks one failure at a time until the system stands
+  still. Logs show every original exception *handled* - the incident report
+  says "it just got slower and slower until restart".
+- **😈 seed:** the drained state outlives its cause: the flaky dependency
+  recovers in seconds, your process never does.
+- **Verified:** follows directly from SemaphoreSlim semantics; verify at build.
+
+### parallel-foreach-async-lie (A1,5)
+
+- **Twist:** Parallel.ForEach happily accepts an async lambda as async void:
+  the loop "completes" before any body finishes, reports success, and has
+  processed exactly nothing.
+- **Mechanic:** `Parallel.ForEach` takes `Action<T>`; an async lambda
+  converts to async void. An async void method returns to its caller at the
+  first `await`, so ForEach sees every invocation "finish" instantly and
+  returns. The real work continues unobserved on the thread pool; its
+  exceptions are async-void exceptions (see #0007) and can kill the process
+  later.
+- **Who hits it:** "make this loop of API calls parallel" - the most common
+  wrong answer to that request. Compiles clean, no warning, looks concurrent.
+- **Repro:** the body awaits a gate (`TaskCompletionSource`) and only then
+  increments a counter. Assert the counter is 0 on the line *after*
+  Parallel.ForEach returns and print "batch finished OK" - then open the gate
+  and show the work trickling in after "success". The TCS gate makes it fully
+  deterministic - no sleeps, no races. No packages.
+- **Damage:** the batch reports success having done nothing yet; failures are
+  unobservable; and the "processed" items may still be mid-flight when the
+  process exits, losing them entirely.
+- **😈 seed:** Good.cs is `Parallel.ForEachAsync` (.NET 6+) - the fix has
+  existed the whole time, one identifier away.
+- **Verified:** ran on .NET 10 (2026-07-22): ForEach returned with 0 of 5
+  items processed.
+
+### the-cached-failure (A1,5)
+
+- **Twist:** Lazy&lt;Task&gt; caches the task, not the value: one transient
+  failure and every caller after it receives the same stale exception until
+  the process restarts.
+- **Mechanic:** the Lazy factory runs once; its return value - the Task
+  *object* - is cached forever. If that task faults, the fault is now the
+  cached "value": every subsequent await observes the same exception, and the
+  factory never runs again. Identical trap with `ConcurrentDictionary<K,
+  Task<V>>` caches.
+- **Who hits it:** async caches - `Lazy<Task<Config>>`, task-per-key
+  dictionaries - the textbook "share one flight between concurrent callers"
+  pattern, minus failure eviction.
+- **Repro:** a `Lazy<Task<string>>` whose factory counts invocations and
+  throws; await it three times; the factory ran once and all three awaits got
+  the same exception. Deterministic, no packages.
+- **Damage:** a 2-second network blip at 09:00 becomes an outage lasting until
+  someone restarts the process. The dependency is healthy; your cache
+  re-serves the corpse of its one failure.
+- **😈 seed:** health checks stay green - they probe the dependency, not your
+  cache.
+- **Verified:** ran on .NET 10 (2026-07-22): 3 awaits, 1 factory call, same
+  cached exception each time.
+
+### the-eliminated-await (A1,5)
+
+- **Twist:** Delete a "redundant" await and return the task directly - the
+  using block disposes the connection before the query touches it: the
+  code-review tip that quietly breaks the method.
+- **Mechanic:** `return await task` inside a method can be shortened to
+  `return task` - a real optimization (skips one state machine) that blogs,
+  analyzers and reviewers genuinely recommend. But `using`, `try/finally`
+  and `catch` are part of the *method*: return the bare task and the method
+  exits immediately, running Dispose while the returned task is still
+  mid-flight. The awaited version kept the scope alive until the work
+  finished. The elision is only safe when nothing after the return point -
+  disposal, catch, finally - matters.
+- **Who hits it:** anyone applying the well-known "elide async/await"
+  advice; the advice is correct in plain pass-through methods and wrong
+  inside any scope, and nothing in the code marks the difference.
+- **Repro:** a helper with `using var conn = new FakeConnection()` returns
+  `QueryAsync(conn)` where QueryAsync awaits a TaskCompletionSource gate and
+  then calls `conn.Use()`; complete the gate after the helper returns -
+  ObjectDisposedException. Fully deterministic, no packages.
+- **Damage:** ObjectDisposedException at best; with resources that don't
+  guard themselves, a query against a closed/recycled handle -
+  use-after-free semantics in managed clothing.
+- **😈 seed:** the `catch` sibling: with the await elided, your catch block
+  never sees the task's exception - the method unwound long ago (pairs with
+  the-eager-throw).
+- **Verified:** ran on .NET 10 (2026-07-22): ODE from the disposed fake
+  connection, gated and deterministic.
+
+### the-timeout-that-stopped-nothing (A1,5)
+
+- **Twist:** The classic WhenAny timeout pattern reports "timed out" and
+  walks away - the abandoned work keeps running, its charge lands a second
+  later, and its exception has no one left to crash.
+- **Mechanic:** `Task.WhenAny(work, Task.Delay(t))` completes when the
+  first task does; the loser is not cancelled - nothing even tries to stop
+  it. The caller logs a timeout and usually retries, while the original
+  work finishes anyway (double side effect) or faults (unobserved
+  exception). "Timeout" in this pattern means "I stopped watching", not
+  "it stopped happening".
+- **Who hits it:** the standard timeout idiom around payments, HTTP calls,
+  and "if it takes more than 5s, retry" logic - one of the most-pasted
+  async snippets in existence.
+- **Repro:** gate the work with a TaskCompletionSource; let
+  Task.CompletedTask play the Delay that already expired; WhenAny declares
+  timeout while the side-effect counter is 0; open the gate - the counter
+  hits 1 *after* "timed out" was reported. Deterministic, no packages.
+- **Damage:** retry-after-timeout doubles the charge: the "timed out"
+  operation succeeded too, so reconciliation finds one order paid twice -
+  silent money damage from a snippet everyone trusts.
+- **😈 seed:** the loser's exception surfaces minutes later as
+  TaskScheduler.UnobservedTaskException - a crash report pointing at
+  nothing (cross-link #0019, #0021).
+- **Verified:** ran on .NET 10 (2026-07-22): charge landed after the
+  timeout verdict was already printed.
+
+### the-self-deadlock (A4)
+
+- **Twist:** SemaphoreSlim is the async replacement for lock - minus
+  reentrancy: the method takes the "lock", calls a helper that takes it
+  again, and the code waits forever for the permit it is holding.
+- **Mechanic:** `lock`/Monitor are reentrant per thread; SemaphoreSlim(1,1)
+  - the standard async mutex - has no ownership concept at all, so a nested
+  WaitAsync in the same logical flow blocks on itself. Migrating locked
+  code to async silently deletes reentrancy from the contract, and the
+  compiler forbidding `await` inside `lock` is what pushes everyone onto
+  SemaphoreSlim in the first place.
+- **Who hits it:** codebases converting synchronized code to async: a
+  guarded public method calls another guarded public method - a call graph
+  that was legal for years under lock.
+- **Repro:** SemaphoreSlim(1,1); WaitAsync; a nested
+  `WaitAsync(TimeSpan.FromMilliseconds(200))` returns false - the
+  self-deadlock, proven without hanging the demo (same technique as
+  semaphore-never-released). Deterministic, no packages.
+- **Damage:** a production hang with zero CPU, no exception, no log entry -
+  the process just stops answering on the one code path where the nested
+  call occurs.
+- **😈 seed:** the reentrant path can hide behind a feature flag or a rare
+  branch for months - the deadlock ships long before it fires.
+- **Verified:** ran on .NET 10 (2026-07-22): nested WaitAsync timed out
+  while the permit was held.
+
+### the-double-wrapped-task (A4,1)
+
+- **Twist:** Task.Factory.StartNew with an async lambda returns
+  Task&lt;Task&gt;: awaiting it waits for the work to *start*, not finish -
+  the await completes instantly, the work is unfinished, the exceptions are
+  nobody's.
+- **Mechanic:** StartNew knows nothing about async delegates: it runs the
+  lambda, and an async lambda "returns" at its first await - handing back
+  the real Task as a *result*. Awaiting the outer shell observes only "the
+  lambda started". `Task.Run` exists precisely because of this: it unwraps
+  automatically. One method name apart, opposite meaning.
+- **Who hits it:** code cargo-culting StartNew "because it takes options",
+  or predating Task.Run; someone adds `async` to the lambda during a
+  refactor and every await of the result quietly stops meaning anything.
+- **Repro:** `Task.Factory.StartNew(async () => { await gate; flag = true; })`;
+  await the outer - flag is still false; only `Unwrap()`/awaiting the inner
+  task observes the real work. Gate makes it deterministic, no packages.
+- **Damage:** "completed" batches with zero work done and inner-task
+  exceptions unobserved - the same lie as parallel-foreach-async-lie
+  wearing a more respectable API.
+- **Verified:** ran on .NET 10 (2026-07-22): outer task completed with the
+  work provably not done.
+
+### threadlocal-doesnt-follow (A6)
+
+- **Twist:** ThreadLocal state does not follow the code across an await:
+  the method resumes on another thread and the "per-request" cache is
+  suddenly empty - or, worse, holds a different request's data.
+- **Mechanic:** in a console/server app an await captures no thread
+  affinity; the continuation runs wherever the scheduler puts it.
+  ThreadLocal and [ThreadStatic] belong to the physical thread, so the
+  async flow walks away from its own state - and the next unrelated work
+  item scheduled onto the OLD thread inherits it. AsyncLocal is the
+  flow-following twin (with its own trap: writes flow down the async call
+  tree, never back up).
+- **Who hits it:** per-request ambient state written pre-async and still
+  running: current user, current tenant, thread-keyed caches and buffers.
+- **Repro:** BUILDER WARNING - the naive `await Task.Yield()` demo does NOT
+  guarantee a thread hop (verified live: it happily resumed on the same
+  pool thread). Deterministic technique: set the ThreadLocal on a dedicated
+  `new Thread` which starts the async method (it runs synchronously to the
+  first await, then the thread *exits*); complete the gate from the main
+  thread. The continuation cannot run on a dead thread, so the hop is
+  guaranteed, and the ThreadLocal reads its default after the await. No
+  packages.
+- **Damage:** the empty-state case is the lucky one; the unlucky one is
+  cross-request bleed - tenant A resumes on a pool thread still warm with
+  tenant B's ThreadLocal. Correctness and privacy, fully silent.
+- **Verified:** ran on .NET 10 (2026-07-22) with the dedicated-thread
+  technique; the Task.Yield version was tried and rejected by that same
+  run.
+
+### the-hijacked-completion (A6,5)
+
+- **Twist:** TaskCompletionSource.SetResult is not a notification - it
+  synchronously runs every waiting continuation on YOUR thread before
+  returning: the "signal" line just executed foreign code inside your
+  critical section.
+- **Mechanic:** by default, completing a TCS runs attached continuations
+  inline on the completing thread. An innocuous `tcs.SetResult(value)`
+  while holding a lock (or any mid-flight invariant) reenters arbitrary
+  awaiter code right there: reentrancy, deadlocks, and stack dives under
+  completion chains. `TaskCreationOptions.RunContinuationsAsynchronously`
+  is the one-argument axiom fix.
+- **Who hits it:** infrastructure code - hand-rolled async queues, caches,
+  pub-sub - anywhere a producer completes a TCS that consumers await.
+- **Repro:** an async consumer awaits tcs.Task and records its thread id;
+  SetResult from the main flow; the recorded id equals the setter's, and
+  print ordering shows the consumer ran *inside* the SetResult call.
+  Deterministic, no packages.
+- **Damage:** the producer "signals" while holding a lock; the awakened
+  consumer takes the same lock - reentrancy corrupting state (same
+  thread), or instant deadlock (SemaphoreSlim). Production hangs traced to
+  a line that looks incapable of blocking.
+- **😈 seed:** CancellationToken.Register callbacks are the same trap -
+  Cancel() runs them inline too.
+- **Verified:** ran on .NET 10 (2026-07-22): continuation executed inside
+  SetResult, on the setter's thread.
+
+### the-eager-throw (A4)
+
+- **Twist:** Delete the "pointless" async keyword from a one-line method
+  and exceptions change their address: validation now throws at the call
+  site, not at the await - and the tasks you had already collected are
+  abandoned mid-flight.
+- **Mechanic:** an async method routes *every* exception - including one
+  thrown before the first await - into the returned task. A non-async
+  Task-returning method throws synchronously at the call. Identical
+  success-path behavior, different failure address; nothing in the
+  signature reveals which one you are calling.
+- **Who hits it:** `var tasks = items.Select(x => client.SendAsync(x)).ToList();
+  await Task.WhenAll(tasks);` - if SendAsync validates eagerly (elided
+  form), one bad item throws during ToList: the try/catch around WhenAll
+  never runs, and the requests already started are left running unobserved
+  (#0019's damage, reached through a different broken model).
+- **Repro:** two methods with identical bodies, one `async`, one not; call
+  both with a bad argument: the elided one throws at the call, the
+  keyworded one returns a task with IsFaulted true. Then the Select/WhenAll
+  shape to show the abandoned in-flight work. Deterministic, no packages.
+- **Damage:** error handling sits in the reviewed-and-approved wrong place;
+  half a batch runs unobserved after the "handled" crash.
+- **Verified:** ran on .NET 10 (2026-07-22): call-site throw vs faulted
+  task, exactly as described.
+
+### the-linked-leak (A6)
+
+- **Twist:** CreateLinkedTokenSource hooks your per-request token to the
+  app-lifetime token - forget Dispose and the app token holds that hook
+  forever: the request's object graph outlives the request, by design.
+- **Mechanic:** a linked CTS registers a callback on its parent token; that
+  registration roots the linked CTS - and everything its own registrations
+  capture - until the parent dies or the linked CTS is disposed. With a
+  process-lifetime parent (shutdown/app token), "forgot Dispose" means
+  "leaks until restart", one request at a time.
+- **Who hits it:** the per-request timeout pattern -
+  `CreateLinkedTokenSource(appStoppingToken)` + CancelAfter - dropped
+  without `using`: a famous slow-leak shape in long-running services.
+- **Repro:** a NoInlining helper creates a linked CTS over a long-lived
+  parent, registers a callback capturing a payload, returns a WeakReference
+  to the payload; forced GC: payload alive without Dispose, collected with
+  it - both branches in one run. Deterministic, no packages.
+- **Damage:** memory grows request by request through a retained path that
+  runs entirely inside framework registration lists - the profiler shows no
+  reference from user code; the "restart cures it" leak.
+- **😈 seed:** those forgotten registrations all *fire* at shutdown -
+  thousands of stale per-request callbacks executing at the worst possible
+  moment.
+- **Verified:** ran on .NET 10 (2026-07-22): payload rooted while
+  undisposed, collected once disposed.
+
+### the-overlapping-timer (A6,5)
+
+- **Twist:** System.Threading.Timer does not wait for your callback: let
+  the work outgrow the period and two invocations run concurrently - the
+  "every minute" job starts racing itself.
+- **Mechanic:** the timer fires on schedule regardless of whether the
+  previous callback returned, so a slow tick overlaps the next one: two
+  threads inside code written as if it runs once at a time. `PeriodicTimer`
+  (`await WaitForNextTickAsync` in a loop) is the modern shape that cannot
+  overlap - the axiom fix.
+- **Who hits it:** cleanup/billing/queue-pump jobs on Timer - correct for
+  years while the table was small, self-racing the week it grew.
+- **Repro:** determinism note: this one needs real ticks (short period),
+  but the assertion is structural, not a timing measurement - the first
+  callback blocks on a CountdownEvent(2) that only the second callback's
+  arrival can open, *proving* two are inside simultaneously; generous
+  timeouts bound the wait. No packages.
+- **Damage:** the billing sweep processes the same rows twice,
+  concurrently - double charges produced by the job that existed to prevent
+  them.
+- **😈 seed:** overlap compounds: each slow tick makes the database
+  slower, which makes more ticks overlap - the job DDoSes itself.
+- **Verified:** ran on .NET 10 (2026-07-22): CountdownEvent proof, two
+  callbacks inside at once.
+
+### the-pool-that-ate-itself (A5,6)
+
+- **Twist:** One .Result "just this once" per request, and under load the
+  thread pool deadlocks itself: every thread is blocked waiting for a
+  continuation that needs a thread - the outage with zero CPU and zero
+  errors.
+- **Mechanic:** sync-over-async parks a pool thread until an async
+  continuation completes - but the continuation needs a pool thread too.
+  When blockers hold the whole pool, nothing can ever complete: a circular
+  wait through the scheduler, with no lock anywhere in the code. In real
+  services the pool is larger, so it appears only under load as a
+  mysterious stall with idle CPU.
+- **REVISIT NOTE for the curator:** `rejected.md` contains ".Result
+  deadlock", declined because the SynchronizationContext version cannot
+  reproduce in a console app. This is the *other* .Result deadlock -
+  starvation-based, no context involved - and it reproduces
+  deterministically by pinning the pool, which is the explicitly-allowed
+  "code fixes the environment" pattern. Flagged openly rather than
+  re-proposed silently; the curator judges whether the objection is
+  answered.
+- **Who hits it:** "we just need the value here" - .Result / .Wait() /
+  GetAwaiter().GetResult() in constructors, property getters, and sync
+  interface implementations over async code.
+- **Repro:** `ThreadPool.SetMinThreads(1,1)` + `SetMaxThreads(2,2)` (the
+  pin that makes at-scale behavior reproducible on two threads); two
+  Task.Run blockers each doing `Inner().GetAwaiter().GetResult()` over an
+  `await Task.Delay(100)`; `Task.WaitAll(blockers, 3s)` returns false -
+  zero progress, ever. BUILDER WARNING: this demo wrecks the pool - it
+  must be the last thing Bad.cs does. Deterministic, no packages.
+- **Damage:** total service stall under load with zero CPU, zero
+  exceptions, nothing in logs - among the hardest production incidents to
+  diagnose, and restart "fixes" it until the next traffic peak.
+- **😈 seed:** the real pool grows ~1 thread per second trying to save
+  you, so production sees slow-motion collapse instead of a clean hang -
+  which is exactly why staging never reproduces it.
+- **Verified:** ran on .NET 10 (2026-07-22): pinned pool, 3-second budget,
+  both workers wedged, no progress.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **async:** ValueTask must be awaited exactly once, immediately - a second
+  await (or a stored one) over a pooled IValueTaskSource throws or returns
+  another operation's data. Real and modern, but needs a deterministic
+  pooled-source repro and a digestibility check before promoting.
+
+- **async:** Monitor and Mutex are thread-affine - releasing after an await
+  can throw SynchronizationLockException because the continuation changed
+  threads. Deterministic via the inline-continuation technique proven in
+  the-hijacked-completion; promote once framed below the ceiling.
+
+- **async:** Task.Delay(0) completes synchronously and never yields, while
+  Task.Yield always does - "give others a turn" written with Delay(0) does
+  nothing. Probably a 😈 section inside another exhibit, not a standalone.

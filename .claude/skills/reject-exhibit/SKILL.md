@@ -18,7 +18,8 @@ individual choices, not in categories, so every rejection is signal, not noise.
 3. **New category if needed.** If the reason doesn't fit an existing category
    (predictable finale, can't reproduce, timing-only, CI-would-lie,
    doesn't-happen-in-real-code), add a numbered one with a one-line definition.
-4. **Remove it from `backlog.md`** if it was queued there.
+4. **Remove its block from `.claude/memory/backlog/<hall>.md`** if it was
+   queued there - the backlog and `rejected.md` must never disagree.
 5. **Confirm** the recorded reason back to him in one line, so he can correct the
    framing before it hardens into my model of his taste.
 

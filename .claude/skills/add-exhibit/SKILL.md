@@ -15,8 +15,8 @@ restate those rules.
 - **One exhibit = one broken mental model** (see the curation bar in
   `CLAUDE.md`).
 - Read `.claude/memory/rejected.md` first - never re-propose a declined
-  idea. Then `backlog.md` for the queued candidates and `archetypes.md` for
-  balance.
+  idea. Then `.claude/memory/backlog/<hall>.md` for the queued candidates and
+  `archetypes.md` for balance.
 - Fix the hall (category) and a kebab-case slug that names the crime:
   `0002-doubles-for-money`, not `0002-my-bug`.
 
@@ -68,9 +68,9 @@ dotnet run tools/check-links.cs
   dotnet run tools/gen-frontpage.cs
   ```
 
-- Update `.claude/memory/state.md` (count, exhibit table, next id) and move
-  the candidate out of `backlog.md` (to done, or to `rejected.md` with a reason
-  if it was dropped mid-build).
+- Update `.claude/memory/state.md` (count, exhibit table, next id) and delete
+  the candidate's block from `.claude/memory/backlog/<hall>.md` (gone because
+  shipped, or moved to `rejected.md` with a reason if dropped mid-build).
 
 ## 8. Hand off
 

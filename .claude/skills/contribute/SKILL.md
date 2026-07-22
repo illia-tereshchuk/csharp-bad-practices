@@ -48,10 +48,11 @@ earlier. Just make sure `origin` points at **their** fork before any push.
 
 ## 2. Offer the menu
 
-Show candidates from `.claude/memory/backlog.md` in the menu format defined by
-the `propose-exhibits` skill: grouped by hall, each hall badged with its emoji
-from `halls.md`, one line per candidate with the hook. Mark which halls nobody
-has opened yet - being first in a hall is the best prize on offer.
+Show candidates from `.claude/memory/backlog/` (one file per hall) in the menu
+format defined by the `propose-exhibits` skill: grouped by hall, each hall
+badged with its emoji from `halls.md`, one line per candidate with the hook.
+Mark which halls nobody has opened yet - being first in a hall is the best
+prize on offer.
 
 Tell them plainly: **pick the one you like most and feel most sure about.** They
 will be explaining it to other developers, so genuine interest shows in the

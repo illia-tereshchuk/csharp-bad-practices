@@ -1,0 +1,39 @@
+# ⚖️ equality
+
+> Status: **opened**. Canonical hall registry (emoji, display name, opened/planned) is `.claude/memory/halls.md`.
+> Entry format and maintenance rules are in `.claude/memory/backlog/README.md`.
+
+### equals-but-not-equal (A4)
+
+- **Twist:** The same two objects are equal inside a HashSet and unequal in an
+  if-statement: Equals was overridden, == was not, and both spellings look
+  interchangeable.
+- **Mechanic:** overriding Equals/GetHashCode does not touch `operator ==`;
+  for classes it remains reference comparison. Collections and LINQ
+  (Contains, Distinct, HashSet, Dictionary) call Equals; hand-written ifs use
+  `==`. One value-object type, two equality regimes, selected by syntax - and
+  no compiler warning exists for the mismatch.
+- **Who hits it:** value objects written as classes with Equals overridden -
+  Money, Address, DateRange - and then `if (total == expected)` in a check
+  somewhere. Records exist precisely to kill this bug, which makes Good.cs a
+  one-word rewrite.
+- **Repro:** Money class overriding Equals/GetHashCode: `a.Equals(b)` true,
+  `a == b` false, `new HashSet<Money> { a }.Contains(b)` true - three
+  contradictory-looking lines in a row. Deterministic, no packages.
+- **Damage:** a payment-matching branch that silently never matches while
+  every collection lookup around it works - behavior differs between "is it
+  in the set" and "is it the same", on identical data.
+- **😈 seed:** the trap inverts for strings: `==` on string is value equality
+  - so developers *trained on strings* expect `==` to follow Equals
+  everywhere else.
+- **Verified:** ran on .NET 10 (2026-07-22): Equals true, == false, HashSet
+  Contains true.
+
+## Seeds
+
+Not yet a full candidate - brainstorm before proposing.
+
+- **equality:** default struct Equals on floating-point fields is *bitwise*
+  when the struct has no reference fields - so +0.0 vs -0.0 and NaN behave
+  opposite to `==` on the same values. Deep-weeds; needs a floor-clearing
+  frame and a premise run before proposing.
