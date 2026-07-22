@@ -77,5 +77,7 @@ Not yet a full candidate - brainstorm before proposing.
   or fold as its 😈.
 
 - **exceptions:** rethrow across an await boundary (the stack is already
-  rebuilt) · `using` swallowing the body's exception when Dispose also
-  throws.
+  rebuilt). Its former sibling here - "using swallows the body's exception
+  when Dispose also throws" - is #0017's finally-replacement mechanic in
+  sugar form (re-verified 2026-07-22); dropped as a duplicate of a shipped
+  exhibit.
