@@ -82,7 +82,7 @@ and the mechanic behind it.
 
 ### 🧩 Pattern Matching
 
-- [0033](src/pattern-matching/0033-switch-expression-not-exhaustive/) never trust a **switch expression** to be exhaustive just because it once compiled clean
+- [0033](src/pattern-matching/0033-switch-expression-not-exhaustive/) never trust a **switch expression** to be exhaustive just because it once compiled clean (@Archikrim)
 
 ### 🪵 Logging
 
