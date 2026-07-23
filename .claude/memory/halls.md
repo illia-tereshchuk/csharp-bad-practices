@@ -28,6 +28,8 @@ per hall. New halls: add a row here first.
 | disposal | 🗑️ | Disposal |
 | equality | ⚖️ | Equality |
 | records | 📇 | Records |
+| pattern-matching | 🧩 | Pattern Matching |
+| logging | 🪵 | Logging |
 
 ## Planned - language mechanics
 
@@ -37,7 +39,6 @@ per hall. New halls: add a row here first.
 | generics | 🧬 | Generics |
 | enums | 🏷️ | Enums |
 | inheritance | 🪆 | Inheritance |
-| pattern-matching | 🧩 | Pattern Matching |
 
 ## Planned - runtime & resources
 
@@ -53,7 +54,6 @@ per hall. New halls: add a row here first.
 |------|:--:|---|
 | http | 🌐 | HTTP |
 | configuration | ⚙️ | Configuration |
-| logging | 🪵 | Logging |
 | regex | 🔤 | Regex |
 | testing | 🧪 | Testing |
 | io | 📁 | IO & Files |
