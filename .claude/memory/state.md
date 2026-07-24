@@ -2,8 +2,8 @@
 
 _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 
-- Exhibits: **33** | Halls: **16** | Next free id: **0034**
-- Last updated after: #0033 (2026-07-23) - switch-expression-not-exhaustive
+- Exhibits: **34** | Halls: **17** | Next free id: **0035**
+- Last updated after: #0034 (2026-07-23) - virtual-call-in-constructor, by @alejandro-capel
 
 ## Exhibits shipped
 
@@ -42,10 +42,11 @@ _Snapshot; `dotnet run tools/next-id.cs` is authoritative for numbering._
 | 0031 | async | parallel-foreach-swallows-async | 1,5 |
 | 0032 | logging | interpolated-log-loses-everything | 4 |
 | 0033 | pattern-matching | switch-expression-not-exhaustive | 5 |
+| 0034 | inheritance | virtual-call-in-constructor | 1 |
 
 ## Halls
 
-**16 opened**, the rest planned. Full registry (slugs, emoji, status) is in
+**17 opened**, the rest planned. Full registry (slugs, emoji, status) is in
 `halls.md` - the encyclopedia taxonomy expanded to ~30 halls on 2026-07-19.
 
 ## Infra status

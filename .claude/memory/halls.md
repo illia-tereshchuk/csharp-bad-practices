@@ -30,6 +30,7 @@ per hall. New halls: add a row here first.
 | records | 📇 | Records |
 | pattern-matching | 🧩 | Pattern Matching |
 | logging | 🪵 | Logging |
+| inheritance | 🪆 | Inheritance |
 
 ## Planned - language mechanics
 
@@ -38,7 +39,6 @@ per hall. New halls: add a row here first.
 | nullability | 🕳️ | Nullability |
 | generics | 🧬 | Generics |
 | enums | 🏷️ | Enums |
-| inheritance | 🪆 | Inheritance |
 
 ## Planned - runtime & resources
 
