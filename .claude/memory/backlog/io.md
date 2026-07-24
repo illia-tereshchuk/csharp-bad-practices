@@ -27,6 +27,104 @@
 - **Verified:** documented decoder defaults; verify at build with the Latin1
   approach.
 
+### utf8-bom-breaks-parser (A4,5)
+
+- **Twist:** File.WriteAllText writes clean UTF-8 - until someone adds
+  Encoding.UTF8 "to be explicit": that argument prepends a three-byte
+  BOM, the CSV's first column becomes "﻿id" - and even
+  StartsWith("id") swears the file is fine.
+- **Mechanic:** the parameterless write overloads use BOM-less UTF-8; the
+  static Encoding.UTF8 instance is configured to emit a preamble, so the
+  *more explicit* call changes the bytes (13 -> 16, EF BB BF first).
+  Read-side asymmetry: File.ReadAllText detects and strips the BOM,
+  Encoding.UTF8.GetString(ReadAllBytes) keeps it. Poison cherry: culture-
+  sensitive StartsWith("id") returns TRUE on the BOM'd string (U+FEFF is
+  culturally ignorable) while the ordinal header == "id" lookup fails -
+  the probe people write to hunt the bug reports everything clean
+  (cross-link: strings hall, contains-and-indexof-disagree).
+- **Who hits it:** exporters "hardened" by making the encoding explicit,
+  and consumers doing byte-level or GetString reads - header-keyed
+  CSV/JSON importers, checksums and signatures computed over "the same"
+  text.
+- **Repro:** write with and without the encoding argument; hex-dump the
+  first bytes; show the two readers disagreeing; the header lookup
+  failing while StartsWith lies. Deterministic, no packages.
+- **Damage:** the header column that "doesn't exist": importers keyed by
+  first-column name drop or misroute every row of a file that renders
+  identically in every editor; producer and consumer disagree on the
+  hash of the same text.
+- **😈 seed:** the diff that planted it reads as pure hardening - adding
+  ", Encoding.UTF8" looks like rigor - and the fix,
+  `new UTF8Encoding(false)`, looks identical in review to the trap; the
+  deciding parameter is invisible at the call site.
+- **Verified:** ran on .NET 10 (2026-07-24): 13 vs 16 bytes, EFBBBF
+  prefix; ReadAllText stripped, GetString kept; culture StartsWith true
+  while the ordinal header compare failed.
+
+### read-without-seeking-to-start (A5)
+
+- **Twist:** serialize into a MemoryStream, hand it to the uploader, and
+  the body that arrives is 0 bytes: the cursor is still parked at the end
+  of what you wrote, and CopyTo faithfully copies everything after it -
+  nothing - reporting success.
+- **Mechanic:** a stream has one position shared by reads and writes;
+  Serialize/Write leaves it at the end (Position == Length). CopyTo and
+  ReadToEnd start from the current position, so the round trip transfers
+  zero bytes without error. `Position = 0` is the entire fix; the fields
+  that would have told you (Length vs Position) are checked by nobody.
+- **Who hits it:** build-then-send flows - serialize to a stream for HTTP
+  StreamContent, mail attachments, blob uploads, zip entries - and
+  write-then-read-back over a single FileStream.
+- **Repro:** JsonSerializer.Serialize into a MemoryStream (32 bytes,
+  Position 32); CopyTo a destination - 0 bytes; rewind - 32; the
+  FileStream flavor round-trips the JSON after `Position = 0`.
+  Deterministic; `#:property PublishAot=false` for the JSON half.
+- **Damage:** empty uploads and attachments that report success end to
+  end - the producer logged "sent", the consumer received a well-formed
+  nothing, and the loss surfaces only through the absence of its
+  effects.
+- **😈 seed:** any refactor makes it vanish - serialize-to-string has no
+  cursor, a fresh wrapping stream resets one - so bisection points at
+  the serialization change that "broke" it, never at the Position nobody
+  sees.
+- **Verified:** ran on .NET 10 (2026-07-24): 0 bytes without rewind, 32
+  after; file flavor round-tripped the JSON.
+
+### exists-swallows-every-error (A5)
+
+- **Twist:** File.Exists said false, so the code took the first-run path
+  and re-initialized the config that was sitting right there: Exists
+  never throws - every failure to *look* (access denied, bad path,
+  file-as-directory) is reported as "not there".
+- **Mechanic:** the contract is "true only if the caller can confirm the
+  file exists"; all internal exceptions become false. Verified faces: a
+  path under an unreadable (chmod 000) parent - false, no exception; a
+  file used as a directory segment - false; null, empty, and
+  NUL-containing paths - false. So false means
+  "missing OR unreachable OR nonsense", and callers read it as plain
+  "missing".
+- **Who hits it:** first-run and ensure-created logic
+  (`if (!File.Exists(p)) initialize()`), pre-overwrite guards, cleanup
+  jobs deleting "orphans" - anywhere a transient permission or mount
+  hiccup gets converted into a confident business decision.
+- **Repro:** real file true; file-as-directory-segment, null, empty, NUL
+  paths all false with no throw; then the permission act:
+  File.SetUnixFileMode the parent to 000 - the intact file reads as
+  missing and the first-run guard fires; restore the mode and the file
+  is back with its contents. BUILDER NOTE: the permission act is
+  Unix-only (CA1416) - lead with the cross-platform faces, gate the
+  chmod act, and restore the mode before cleanup. Deterministic, no
+  packages.
+- **Damage:** data overwritten or state re-initialized because a
+  directory was briefly unreadable - and the post-incident check finds
+  the file present and healthy, so the report says "cannot reproduce".
+- **😈 seed:** the defensive rewrite is built from the same lying
+  primitives - Directory.Exists swallows identically - so "check the
+  directory first, then the file" just asks two liars instead of one.
+- **Verified:** ran on .NET 10 (2026-07-24): all five false-faces
+  confirmed; under a 000 parent the existing file read as missing
+  without an exception and the guard took the re-initialize path.
+
 ## Seeds
 
 Not yet a full candidate - brainstorm before proposing.
@@ -34,14 +132,6 @@ Not yet a full candidate - brainstorm before proposing.
 - **io:** relative paths resolve against the current working directory, not
   the exe location - real (services, schedulers), but needs a framing that
   clears the primer floor.
-
-- **utf8-bom-breaks-parser** (A5) - UTF-8-with-BOM prepends three invisible
-  bytes; the JSON or CSV reader downstream treats them as part of the first
-  field, and the parse fails on a file that looks identical in every editor.
-
-- **read-without-seeking-to-start** (A5) - write to a stream, then read it
-  back without seeking to position 0: the cursor is at the end, so the
-  "round trip" returns empty with no error.
 
 - **io:** `File.Exists` then `File.Open` TOCTOU, and `Directory.GetFiles`
   order not being guaranteed - both race- or environment-shaped; promote
